@@ -1,12 +1,12 @@
 # Android Overlay and Accessibility
 
-Native Kotlin half of the app, in `app/android/app/src/main/kotlin/com/relay/relay_translate/` (planned,
-Phases 7–9).
+Native Kotlin half of the app, in `app/android/app/src/main/kotlin/com/relay/relay_translate/`.
+`Translator` + `TranslateChannel` landed in Phase 1; the rest is planned for Phases 7–9.
 
 ## Pieces
 | Class | Job | Phase |
 |---|---|---|
-| `Translator` | ML Kit translate + language-id, model downloads; shared by the service and Flutter ([[Translation Pipeline]]) | 1 |
+| `Translator` + `TranslateChannel` | ML Kit translate + language-id, model downloads, `relay/translate` channel; shared by the service and Flutter ([[Translation Pipeline]]) | 1 ✅ |
 | `BubbleService` | foreground service (`specialUse` type on Android 14+), owns overlay windows, notification with Hide | 7 |
 | `BubbleView` / `BubbleGesture` | the bubble + ring; gesture port of [[Bubble Interaction Model]] | 7 |
 | `MenuView`, `ToastView`, `HintView` | small overlay windows added on demand | 7 |

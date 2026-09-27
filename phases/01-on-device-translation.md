@@ -79,7 +79,8 @@ wiki page `Translation Pipeline`. This gives an early read on ML Kit before test
 
 ## Exit criteria
 
-- [ ] From Dart: `translate(["Hey! Did you make it to London okay?"], "fr")` → French, `source = "en"`.
-- [ ] Works in airplane mode once models are downloaded.
-- [ ] First-time source language triggers download and then translates.
-- [ ] Spike findings recorded in the wiki.
+- [x] From Dart: `translate(["Hey! Did you make it to London okay?"], "fr")` → French, `source = "en"`.
+  Verified on the emulator: "Hé! Avez-vous fait à Londres d'accord?", labelled EN.
+- [x] Works in airplane mode once models are downloaded. (300–1100 ms per 7-message batch.)
+- [x] First-time source language triggers download and then translates. (~24 s for one model, ~36 s for two.)
+- [x] Spike findings recorded in the wiki (`Translation Pipeline`).

@@ -49,5 +49,6 @@ relay_translate/
 
 ## Exit criteria
 
-- [ ] `flutter run --flavor beta` shows the default app on an Android emulator/device (API 26+).
-- [ ] Repo committed; wiki `Architecture` page reflects the real layout.
+- [x] `flutter run --flavor beta` shows the default app on an Android emulator/device (API 26+).
+  Verified 2026-09-27 on the Pixel 10 emulator (API 36): beta flavor launches, "Hello World!".
+- [x] Repo committed; wiki `Architecture` page reflects the real layout.

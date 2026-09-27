@@ -1,6 +1,9 @@
 # Flutter App
 
-Lives in `app/` (not created yet — Phase 0). Android only, `minSdk 26`.
+Lives in `app/`. Android only, `minSdk 26`, flavors `beta` and `prod`.
+
+Until Phase 2 the only screen is `screens/spike_screen.dart` (the ML Kit quality spike, see
+[[Translation Pipeline]]); `main.dart` points straight at it.
 
 ## Planned layout
 ```

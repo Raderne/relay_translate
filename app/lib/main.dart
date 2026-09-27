@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
 
+import 'screens/spike_screen.dart';
+
 void main() {
-  runApp(const MainApp());
+  runApp(const RelayApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class RelayApp extends StatelessWidget {
+  const RelayApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
-    );
+    // Phase 1: the ML Kit spike is the whole app. Real shell arrives in Phase 2.
+    return const MaterialApp(title: 'Relay Translate', home: SpikeScreen());
   }
 }

@@ -14,7 +14,10 @@ Statistical language ID needs text. A few characters, slang, emoji and names giv
 - Phase 11: a "Translate from…" override picker in the detail sheet.
 
 ## State (2026-09-27)
-Design only. Measure the detection failure rate in the Phase 10 beta (target < 5%). If it fails, that
-pushes toward Azure, which has its own detection.
+The detection rule is implemented (`LanguageDetection.kt`, JVM-tested) and behaved correctly in the
+Phase 1 spike: a French sentence inside an English batch was detected as `fr` instead of inheriting
+`en`. What the spike exposed is a **different** problem — slang tokens ("brb", "tbh", "pls", "u") pass
+through untranslated. That's translation quality, tracked in [[Translation Pipeline]], and it's what
+the Phase 10 beta has to measure (detection-failure target stays < 5%).
 
 Links: [[Translation Pipeline]], [[Android Overlay and Accessibility]]

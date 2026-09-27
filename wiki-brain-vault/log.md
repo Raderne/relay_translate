@@ -16,3 +16,6 @@ Touched: index, Relay Translate, Design Source, Design System - Industry, Screen
 
 ## [2026-09-27 16:30] session | Switch translation to ML Kit, Azure backup
 Touched: Architecture, Translation Pipeline, Gotcha - Short Message Language Detection, Backend API, Database Schema, Privacy and Permissions, Flutter App, Android Overlay and Accessibility, Relay Translate, Design Source, Phases Roadmap, CLAUDE.md Rules, index
+
+## [2026-09-27 22:45] session | Phases 0 and 1: app scaffold, on-device ML Kit
+Touched: Architecture, Flutter App, Android Overlay and Accessibility, Translation Pipeline, Gotcha - Short Message Language Detection, Phases Roadmap

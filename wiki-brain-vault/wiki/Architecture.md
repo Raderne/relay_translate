@@ -17,8 +17,8 @@ No server. Translation, language detection and history all stay on the phone.
 `Translator.kt` gains a cloud path → **Node.js** (`node:http`) + **SQLite** (`node:sqlite`) proxy →
 **Azure Translator**. See [[Backend API]].
 
-## Repo layout (planned, Phase 0)
-- `app/` — Flutter project; native code in `app/android/app/src/main/kotlin/…` → [[Flutter App]], [[Android Overlay and Accessibility]]
+## Repo layout (Phase 0, done)
+- `app/` — Flutter project, Android only, `minSdk 26`, flavors `beta` (`com.relay.relay_translate.beta`) and `prod`; native code in `app/android/app/src/main/kotlin/com/relay/relay_translate/` → [[Flutter App]], [[Android Overlay and Accessibility]]
 - `tools/` — team-only scripts (Phase 10 Azure comparison)
 - `server/` — only if Phase 12 is built → [[Backend API]]
 - `phases/` — build plan → [[Phases Roadmap]]
