@@ -2,8 +2,9 @@
 
 Lives in `app/`. Android only, `minSdk 26`, flavors `beta` and `prod`.
 
-Until Phase 2 the only screen is `screens/spike_screen.dart` (the ML Kit quality spike, see
-[[Translation Pipeline]]); `main.dart` points straight at it.
+Debug builds open `screens/gallery.dart` (the design-system gallery, [[Design System - Industry]]).
+Release builds still open the ML Kit spike (`screens/spike_screen.dart`, [[Translation Pipeline]])
+until the real screens land. `main.dart` applies `RelayTheme.data`.
 
 ## Planned layout
 ```

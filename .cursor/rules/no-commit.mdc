@@ -1,0 +1,17 @@
+---
+description: Do not create git commits unless the user asks in the current message
+alwaysApply: true
+---
+
+# Do not commit
+
+Do not run `git commit`, `git push`, or any command whose purpose is to record a commit, unless the user explicitly asks for a commit in the current message.
+
+- Staging (`git add`) is fine when the user asked to commit. Otherwise leave the working tree as it is.
+- Finishing a phase, updating the wiki, or a clean test run is not a request to commit.
+- If a previous message asked for a commit and this one does not, do not commit.
+
+```text
+User: implement the next phase
+Agent: makes the changes, updates the wiki, does not commit.
+```

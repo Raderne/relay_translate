@@ -7,7 +7,7 @@ The build plan lives in `phases/` (one file per phase, each with tasks + exit cr
 |---|---|---|---|
 | 0 | Foundations | `phases/00-foundations.md` | done (2026-09-27) |
 | 1 | On-device translation (ML Kit) | `phases/01-on-device-translation.md` | done (2026-09-27) |
-| 2 | Flutter shell + design system | `phases/02-flutter-design-system.md` | not started |
+| 2 | Flutter shell + design system | `phases/02-flutter-design-system.md` | done (2026-09-27) |
 | 3 | Onboarding + permissions | `phases/03-onboarding-permissions.md` | not started |
 | 4 | Settings + local DB | `phases/04-settings-local-db.md` | not started |
 | 5 | Chatter demo + in-app bubble | `phases/05-chatter-demo.md` | not started |

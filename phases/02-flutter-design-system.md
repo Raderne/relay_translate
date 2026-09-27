@@ -61,7 +61,8 @@ the prototype. Delete-able later — it replaces a Widgetbook dependency.
 
 ## Exit criteria
 
-- [ ] Gallery renders all widgets; side-by-side screenshot vs. prototype looks the same (font, marks, colors).
-- [ ] No hex literal or font name outside `theme/`.
-- [ ] Golden test for `Blueprint` and `RelayButton.primary` (`flutter test --update-goldens` once).
-- [ ] Wiki `Design System - Industry` lists the Dart names.
+- [x] Gallery renders all widgets; side-by-side screenshot vs. prototype looks the same (font, marks, colors).
+  Verified 2026-09-27 on the Pixel 10 emulator: condensed headings, square controls, registration marks, accent ramp.
+- [x] No hex literal or font name outside `theme/`. (`test/theme/no_literals_test.dart`)
+- [x] Golden test for `Blueprint` and `RelayButton.primary` (`flutter test --update-goldens` once).
+- [x] Wiki `Design System - Industry` lists the Dart names.
