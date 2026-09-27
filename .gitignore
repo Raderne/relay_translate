@@ -1,0 +1,26 @@
+# Flutter / Dart
+app/.dart_tool/
+app/build/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+app/android/.gradle/
+app/android/local.properties
+app/android/key.properties
+*.jks
+*.keystore
+
+# Node
+node_modules/
+server/data/*.db
+server/data/*.db-*
+.env
+
+# Wiki-Brain
+wiki-brain-vault/graphify-out/
+.obsidian/workspace*.json
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

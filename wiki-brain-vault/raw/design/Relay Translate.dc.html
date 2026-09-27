@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/industry-3ded68ab-3546-4bac-9c3d-c0cb405cdbc4/styles.css">
+<script src="_ds/industry-3ded68ab-3546-4bac-9c3d-c0cb405cdbc4/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-neutral-200)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}button{font:inherit;color:inherit}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:48px;padding:40px 24px;font-family:var(--font-body);color:var(--color-text)">
+  <div style="max-width:260px;display:flex;flex-direction:column;gap:14px">
+    <div style="font:600 11px var(--font-body);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">Android prototype</div>
+    <h2 style="margin:0">Relay — translate inside any app</h2>
+    <p style="margin:0;font-size:14px;color:var(--color-neutral-700);text-wrap:pretty">A floating bubble sits over other apps. In the Chatter demo, English messages translate into French:</p>
+    <div style="display:flex;flex-direction:column;gap:10px;font-size:14px">
+      <div style="display:grid;grid-template-columns:64px 1fr;gap:8px"><span style="font:600 14px var(--font-heading);text-transform:uppercase;color:var(--color-accent-700)">Hold</span><span>Replace every message on screen. Hold again for the originals.</span></div>
+      <div style="display:grid;grid-template-columns:64px 1fr;gap:8px"><span style="font:600 14px var(--font-heading);text-transform:uppercase;color:var(--color-accent-700)">Drag</span><span>Drop the bubble on one message to replace it.</span></div>
+      <div style="display:grid;grid-template-columns:64px 1fr;gap:8px"><span style="font:600 14px var(--font-heading);text-transform:uppercase;color:var(--color-accent-700)">Open</span><span>Tap a translated message to copy it or reply in French.</span></div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
+      <button class="btn btn-secondary" onClick="{{ goOb1 }}">Onboarding</button>
+      <button class="btn btn-secondary" onClick="{{ goHome }}">Settings</button>
+      <button class="btn btn-secondary" onClick="{{ goHist }}">History</button>
+      <button class="btn btn-secondary" onClick="{{ goChat }}">Chatter</button>
+    </div>
+  </div>
+
+  <div style="width:380px;height:800px;padding:10px;background:var(--color-neutral-900);border-radius:38px;box-shadow:var(--shadow-lg);flex:none">
+    <div ref="{{ screenRef }}" style="position:relative;width:360px;height:780px;overflow:hidden;border-radius:28px;background:var(--color-bg);user-select:none;touch-action:none">
+
+      <div style="position:absolute;top:0;left:0;right:0;height:28px;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font:500 12px var(--font-body);color:var(--color-text)">
+        <span>9:41</span>
+        <div style="display:flex;gap:6px;align-items:center">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><path d="M12 20h.01"></path></svg>
+          <svg width="20" height="12" viewBox="0 0 26 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="21" height="12"></rect><rect x="3" y="3" width="14" height="8" fill="currentColor" stroke="none"></rect><path d="M24 5v4"></path></svg>
+        </div>
+      </div>
+
+      <sc-if value="{{ isOb1 }}" hint-placeholder-val="{{ true }}">
+        <div style="position:absolute;inset:28px 0 24px;display:flex;flex-direction:column;padding:28px 24px 20px;gap:22px">
+          <div style="font:600 11px var(--font-body);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">Relay · 1 of 2</div>
+          <h1 style="margin:0;font-size:40px">Translate inside any app</h1>
+          <div class="blueprint" style="height:230px;padding:18px 26px;display:flex;flex-direction:column;gap:10px;position:relative">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <div style="width:62%;height:26px;border:1px solid var(--color-divider)"></div>
+            <div style="width:52%;height:26px;border:1px solid var(--color-accent);background:var(--color-accent-100);display:flex;align-items:center;padding:0 8px;font-size:11px;color:var(--color-accent-800)">Tu es bien arrivé ?</div>
+            <div style="width:55%;height:26px;border:1px solid var(--color-divider);align-self:flex-end"></div>
+            <div style="width:70%;height:26px;border:1px solid var(--color-divider)"></div>
+            <div style="position:absolute;right:26px;top:74px;width:44px;height:44px;border-radius:50%;background:var(--color-accent);display:grid;place-items:center;color:var(--color-bg);box-shadow:var(--shadow-md)">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+            </div>
+          </div>
+          <p style="margin:0;font-size:15px;color:var(--color-neutral-800);text-wrap:pretty">Relay puts a small bubble on top of WhatsApp, Telegram, email and any other app. Hold it to translate the whole screen, or drag it onto a single message.</p>
+          <div style="margin-top:auto">
+            <button class="btn btn-primary blueprint" style="width:100%;height:48px;font-size:17px" onClick="{{ goOb2 }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Continue</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isOb2 }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:28px 0 24px;display:flex;flex-direction:column;padding:28px 24px 20px;gap:22px">
+          <div style="font:600 11px var(--font-body);letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">Relay · 2 of 2</div>
+          <h1 style="margin:0;font-size:40px">Let Relay appear on top of other apps</h1>
+          <p style="margin:0;font-size:15px;color:var(--color-neutral-800);text-wrap:pretty">Android asks for the "Display over other apps" permission before the bubble can show. Relay reads on-screen text only when you hold or drop the bubble.</p>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--color-divider)">
+            <div style="display:grid;grid-template-columns:28px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--color-divider);font-size:14px"><span style="font:600 18px var(--font-heading);color:var(--color-accent-700)">01</span><span>Display over other apps — shows the bubble</span></div>
+            <div style="display:grid;grid-template-columns:28px 1fr;gap:10px;padding:14px 0;border-bottom:1px solid var(--color-divider);font-size:14px"><span style="font:600 18px var(--font-heading);color:var(--color-accent-700)">02</span><span>Screen text access — reads messages when you ask for a translation</span></div>
+          </div>
+          <div style="margin-top:auto;display:flex;flex-direction:column;gap:8px">
+            <button class="btn btn-primary blueprint" style="width:100%;height:48px;font-size:17px" onClick="{{ goPerm }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Open Android settings</button>
+            <button class="btn btn-ghost" style="width:100%;height:40px" onClick="{{ goOb1 }}">Back</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isPerm }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:28px 0 24px;background:var(--color-neutral-100);display:flex;flex-direction:column;font-family:system-ui,sans-serif">
+          <div style="display:flex;align-items:center;gap:14px;padding:18px 18px 8px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+            <span style="font-size:20px">Display over other apps</span>
+          </div>
+          <div style="margin:18px 16px;padding:18px;background:var(--color-neutral-200);border-radius:20px;display:flex;align-items:center;gap:14px">
+            <div style="width:40px;height:40px;border-radius:50%;background:var(--color-accent);display:grid;place-items:center;color:var(--color-bg)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg></div>
+            <div style="flex:1"><div style="font-size:16px">Relay</div><div style="font-size:13px;color:var(--color-neutral-700)">Allow display over other apps</div></div>
+            <button onClick="{{ grantPerm }}" style="width:52px;height:30px;border-radius:15px;border:none;padding:3px;cursor:pointer;display:flex;justify-content:{{ permJust }};background:{{ permTrack }};transition:background .2s"><span style="width:24px;height:24px;border-radius:50%;background:#fff"></span></button>
+          </div>
+          <p style="margin:0 24px;font-size:13px;color:var(--color-neutral-700);line-height:1.5">This permission allows an app to display on top of other apps you're using. It may interfere with your use of those apps.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isHome }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:28px 0 24px;overflow-y:auto;display:flex;flex-direction:column">
+          <div class="nav" style="padding:16px 20px 8px"><span class="nav-brand" style="font-size:24px">Relay</span><span class="tag tag-accent">{{ bubbleStatus }}</span></div>
+          <div style="padding:8px 20px 20px;display:flex;flex-direction:column;gap:24px;flex:1">
+            <button class="blueprint" onClick="{{ openSheet }}" style="position:relative;background:transparent;text-align:left;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:4px" style-hover="background:var(--color-accent-100)">
+              <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+              <span style="font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">Translate into</span>
+              <span style="display:flex;align-items:baseline;justify-content:space-between"><span style="font:600 36px/1.1 var(--font-heading)">{{ langName }}</span><span style="font:600 14px var(--font-heading);color:var(--color-accent-700)">Change</span></span>
+              <span style="font-size:13px;color:var(--color-neutral-700)">From any language · detected automatically</span>
+            </button>
+
+            <div style="display:flex;flex-direction:column">
+              <h6 style="margin:0 0 4px;color:var(--color-neutral-700)">Bubble</h6>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--color-divider)">
+                <span style="font-size:15px">Show bubble over apps</span>
+                <button onClick="{{ toggleBubble }}" style="width:40px;height:22px;border:1px solid var(--color-divider);padding:2px;cursor:pointer;display:flex;justify-content:{{ bubbleJust }};background:{{ bubbleTrack }}"><span style="width:16px;height:16px;background:{{ bubbleKnob }}"></span></button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--color-divider)">
+                <span style="font-size:15px">Snap to screen edge</span>
+                <button onClick="{{ toggleSnap }}" style="width:40px;height:22px;border:1px solid var(--color-divider);padding:2px;cursor:pointer;display:flex;justify-content:{{ snapJust }};background:{{ snapTrack }}"><span style="width:16px;height:16px;background:{{ snapKnob }}"></span></button>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--color-divider)">
+                <span style="font-size:15px">Size</span>
+                <div class="seg">
+                  <label class="seg-opt"><input type="radio" name="size" checked="{{ sizeS }}" onChange="{{ setS }}">S</label>
+                  <label class="seg-opt"><input type="radio" name="size" checked="{{ sizeM }}" onChange="{{ setM }}">M</label>
+                  <label class="seg-opt"><input type="radio" name="size" checked="{{ sizeL }}" onChange="{{ setL }}">L</label>
+                </div>
+              </div>
+              <button onClick="{{ goHist }}" style="display:flex;align-items:center;justify-content:space-between;padding:12px 0;border:none;border-bottom:1px solid var(--color-divider);background:transparent;cursor:pointer;text-align:left" style-hover="background:var(--color-accent-100)">
+                <span style="font-size:15px">History</span>
+                <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:var(--color-neutral-700)">{{ histCount }}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m9 18 6-6-6-6"></path></svg></span>
+              </button>
+            </div>
+
+            <button class="btn btn-primary blueprint" style="width:100%;height:48px;font-size:17px;margin-top:auto" onClick="{{ goChat }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Try it in Chatter</button>
+          </div>
+        </div>
+
+        <sc-if value="{{ sheet }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;z-index:40;background:color-mix(in srgb,var(--color-neutral-900) 45%,transparent)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;z-index:41;background:var(--color-bg);border-top:1px solid var(--color-divider);padding:18px 20px 36px;display:flex;flex-direction:column">
+            <h4 style="margin:0 0 8px">Translate into</h4>
+            <sc-for list="{{ langs }}" as="l" hint-placeholder-count="4">
+              <button onClick="{{ l.pick }}" style="display:flex;align-items:center;justify-content:space-between;padding:14px 4px;background:transparent;border:none;border-bottom:1px solid var(--color-divider);cursor:pointer;font-size:16px;text-align:left" style-hover="background:var(--color-accent-100)">
+                <span>{{ l.name }} <span style="color:var(--color-neutral-600);font-size:13px">{{ l.native }}</span></span>
+                <span style="font:600 13px var(--font-heading);color:var(--color-accent-700)">{{ l.mark }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <sc-if value="{{ isHist }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:28px 0 24px;display:flex;flex-direction:column">
+          <div class="nav" style="padding:12px 12px 8px 8px;gap:6px">
+            <button class="btn btn-ghost btn-icon" onClick="{{ goHome }}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg></button>
+            <span class="nav-brand" style="font-size:24px">History</span>
+            <sc-if value="{{ hasHistory }}"><button class="btn btn-ghost" onClick="{{ clearHist }}">Clear</button></sc-if>
+          </div>
+          <div style="flex:1;overflow-y:auto;padding:4px 20px 20px;display:flex;flex-direction:column">
+            <sc-if value="{{ noHistory }}" hint-placeholder-val="{{ true }}">
+              <div class="blueprint" style="margin-top:24px;padding:28px 20px;display:flex;flex-direction:column;gap:8px;align-items:flex-start">
+                <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                <h4 style="margin:0">Nothing yet</h4>
+                <p style="margin:0;font-size:14px;color:var(--color-neutral-700)">Every message you translate with the bubble is saved here.</p>
+                <button class="btn btn-secondary" style="margin-top:6px" onClick="{{ goChat }}">Open Chatter</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ hasHistory }}"><h6 style="margin:8px 0 4px;color:var(--color-neutral-700)">Today</h6></sc-if>
+            <sc-for list="{{ history }}" as="h" hint-placeholder-count="0">
+              <div style="padding:12px 0;border-bottom:1px solid var(--color-divider);display:flex;flex-direction:column;gap:4px">
+                <div style="display:flex;justify-content:space-between;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--color-accent-700)"><span>{{ h.pair }} · {{ h.app }}</span><span style="color:var(--color-neutral-600)">{{ h.time }}</span></div>
+                <span style="font:600 17px/1.3 var(--font-heading)">{{ h.tr }}</span>
+                <span style="font-size:13px;color:var(--color-neutral-700)">{{ h.src }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ isChat }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;inset:28px 0 24px;display:flex;flex-direction:column;background:var(--color-bg)">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--color-divider)">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+            <div style="width:36px;height:36px;border:1px solid var(--color-divider);display:grid;place-items:center;font:600 15px var(--font-heading);color:var(--color-accent-700)">SC</div>
+            <div style="flex:1;display:flex;flex-direction:column;line-height:1.2"><span style="font:600 18px var(--font-heading)">Sam Carter</span><span style="font-size:12px;color:var(--color-neutral-600)">online</span></div>
+            <span style="font:600 11px var(--font-body);letter-spacing:.1em;color:var(--color-neutral-600)">CHATTER</span>
+          </div>
+          <div style="height:2px"><div style="height:2px;background:var(--color-accent);width:{{ barW }};transition:{{ barT }}"></div></div>
+          <div style="flex:1;overflow-y:auto;padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+            <div style="align-self:center;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--color-neutral-600)">Today</div>
+            <sc-for list="{{ msgs }}" as="m" hint-placeholder-count="6">
+              <sc-if value="{{ m.out }}">
+                <div data-msg="{{ m.id }}" style="align-self:flex-end;max-width:78%;background:var(--color-accent-100);border:1px solid var(--color-accent-300);padding:8px 10px 6px;font-size:14.5px;line-height:1.4">
+                  <sc-if value="{{ m.viaRelay }}"><div style="font-size:10.5px;letter-spacing:.04em;color:var(--color-accent-700);margin-bottom:3px">Sent via Relay · FR → EN</div></sc-if>
+                  {{ m.text }}<div style="font-size:10.5px;color:var(--color-neutral-600);text-align:right;margin-top:2px">{{ m.time }}</div>
+                </div>
+              </sc-if>
+              <sc-if value="{{ m.inc }}">
+                <div data-msg="{{ m.id }}" onClick="{{ m.open }}" style="align-self:flex-start;max-width:80%;border:1px solid {{ m.border }};padding:8px 10px 6px;font-size:14.5px;line-height:1.4;outline:{{ m.outline }};outline-offset:3px;opacity:{{ m.dim }};cursor:{{ m.cursor }};transition:opacity .25s, border-color .2s">
+                  <sc-if value="{{ m.tag }}"><div style="display:flex;align-items:center;gap:4px;font-size:10.5px;letter-spacing:.04em;color:var(--color-accent-700);margin-bottom:3px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>{{ m.tagText }}</div></sc-if>
+                  {{ m.text }}
+                  <div style="font-size:10.5px;color:var(--color-neutral-600);text-align:right;margin-top:2px">{{ m.time }}</div>
+                </div>
+              </sc-if>
+            </sc-for>
+          </div>
+          <div style="display:flex;gap:8px;padding:8px 12px 10px;align-items:center;border-top:1px solid var(--color-divider)">
+            <div class="input" style="flex:1;min-height:42px;display:flex;align-items:center;color:{{ draftColor }}">{{ draftText }}</div>
+            <button class="btn btn-primary" onClick="{{ sendDraft }}" style="width:42px;height:42px;padding:0">
+              <sc-if value="{{ hasDraft }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m22 2-7 20-4-9-9-4Z"></path><path d="M22 2 11 13"></path></svg></sc-if>
+              <sc-if value="{{ noDraft }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><path d="M12 19v3"></path></svg></sc-if>
+            </button>
+          </div>
+        </div>
+
+        <sc-if value="{{ toast }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute;left:12px;right:12px;bottom:92px;z-index:23;background:var(--color-neutral-900);color:var(--color-neutral-100);padding:10px 12px 10px 14px;display:flex;align-items:center;gap:10px;font-size:13.5px;box-shadow:var(--shadow-md)">
+            <span style="flex:1">{{ toastText }}</span>
+            <sc-if value="{{ toastUndo }}"><button onClick="{{ undoToast }}" style="background:transparent;border:none;color:var(--color-accent-300);font:600 14px var(--font-heading);cursor:pointer">{{ toastAction }}</button></sc-if>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ menu }}" hint-placeholder-val="{{ false }}">
+          <div class="blueprint elev-md" style="position:absolute;z-index:24;left:{{ menuLeft }};top:{{ menuTop }};width:190px;background:var(--color-bg);display:flex;flex-direction:column">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <button onClick="{{ menuTranslate }}" style="background:transparent;border:none;border-bottom:1px solid var(--color-divider);padding:11px 12px;text-align:left;cursor:pointer;font-size:14px" style-hover="background:var(--color-accent-100)">{{ menuTransLabel }}</button>
+            <button onClick="{{ menuSettings }}" style="background:transparent;border:none;border-bottom:1px solid var(--color-divider);padding:11px 12px;text-align:left;cursor:pointer;font-size:14px;display:flex;justify-content:space-between" style-hover="background:var(--color-accent-100)"><span>Language</span><span style="font:600 13px var(--font-heading);color:var(--color-accent-700)">{{ langCode }}</span></button>
+            <button onClick="{{ goHist }}" style="background:transparent;border:none;border-bottom:1px solid var(--color-divider);padding:11px 12px;text-align:left;cursor:pointer;font-size:14px" style-hover="background:var(--color-accent-100)">History</button>
+            <button onClick="{{ hideBubble }}" style="background:transparent;border:none;padding:11px 12px;text-align:left;cursor:pointer;font-size:14px" style-hover="background:var(--color-accent-100)">Hide bubble</button>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showHint }}" hint-placeholder-val="{{ false }}">
+          <div class="blueprint" style="position:absolute;z-index:21;left:{{ hintLeft }};top:{{ hintTop }};width:200px;background:var(--color-bg);padding:10px 12px;font-size:13px;line-height:1.4;box-shadow:var(--shadow-md)">
+            <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+            <b style="font-family:var(--font-heading);font-size:15px">Hold</b> to translate this screen. <b style="font-family:var(--font-heading);font-size:15px">Drag</b> onto a message to translate one.
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ showBubble }}" hint-placeholder-val="{{ true }}">
+          <div onPointerDown="{{ down }}" onPointerMove="{{ move }}" onPointerUp="{{ up }}" onPointerCancel="{{ up }}" style="position:absolute;z-index:25;left:{{ bLeft }};top:{{ bTop }};width:{{ bSize }};height:{{ bSize }};transition:{{ bTrans }};transform:{{ bScale }};cursor:grab;touch-action:none">
+            <svg width="{{ ringBox }}" height="{{ ringBox }}" style="position:absolute;left:-6px;top:-6px;pointer-events:none;transform:rotate(-90deg)"><circle cx="{{ ringC }}" cy="{{ ringC }}" r="{{ ringR }}" fill="none" stroke="var(--color-accent-700)" stroke-width="2" stroke-dasharray="{{ ringDash }}" stroke-dashoffset="{{ ringOff }}" style="transition:{{ ringTrans }}"></circle></svg>
+            <div style="width:100%;height:100%;border-radius:50%;background:{{ bFill }};display:grid;place-items:center;color:var(--color-bg);box-shadow:var(--shadow-lg);border:2px solid var(--color-bg)">
+              <svg width="{{ iconSize }}" height="{{ iconSize }}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+            </div>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ detail }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ closeDetail }}" style="position:absolute;inset:0;z-index:40;background:color-mix(in srgb,var(--color-neutral-900) 45%,transparent)"></div>
+          <div style="position:absolute;left:0;right:0;bottom:0;z-index:41;background:var(--color-bg);border-top:1px solid var(--color-divider);padding:16px 20px 40px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;justify-content:space-between">
+              <span class="card-kicker" style="color:var(--color-accent-700)">English → {{ langName }} · Chatter</span>
+              <button class="btn btn-ghost btn-icon" style="width:32px;height:32px" onClick="{{ closeDetail }}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg></button>
+            </div>
+            <div style="font:600 24px/1.2 var(--font-heading);text-wrap:pretty">{{ dTr }}</div>
+            <div style="display:flex;flex-direction:column;gap:2px;padding-top:10px;border-top:1px solid var(--color-divider)">
+              <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-600)">Original</span>
+              <span style="font-size:14px;color:var(--color-neutral-800)">{{ dSrc }}</span>
+            </div>
+            <sc-if value="{{ notReplying }}">
+              <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:4px">
+                <button class="btn btn-secondary" style="height:40px" onClick="{{ copyDetail }}">{{ copyLabel }}</button>
+                <button class="btn btn-secondary" style="height:40px" onClick="{{ revertDetail }}">Show original</button>
+                <button class="btn btn-primary blueprint" style="height:40px" onClick="{{ startReply }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Reply</button>
+              </div>
+            </sc-if>
+            <sc-if value="{{ replying }}">
+              <div class="field" style="margin-top:4px">
+                <label>Your reply in {{ langName }}</label>
+                <textarea class="input" style="min-height:72px;user-select:text;resize:none" value="{{ replyText }}" onChange="{{ onReply }}"></textarea>
+              </div>
+              <sc-if value="{{ hasReplyOut }}">
+                <div class="blueprint" style="padding:10px 12px;display:flex;flex-direction:column;gap:2px">
+                  <i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>
+                  <span style="font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-700)">English</span>
+                  <span style="font-size:15px">{{ replyOut }}</span>
+                </div>
+              </sc-if>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <button class="btn btn-secondary" style="height:40px" onClick="{{ doTranslateReply }}" disabled="{{ replyBusy }}">{{ translateLabel }}</button>
+                <button class="btn btn-primary blueprint" style="height:40px" onClick="{{ pasteReply }}" disabled="{{ noReplyOut }}"><i class="corner tl"></i><i class="corner tr"></i><i class="corner bl"></i><i class="corner br"></i>Paste into Chatter</button>
+              </div>
+            </sc-if>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <div onClick="{{ navPill }}" style="position:absolute;left:0;right:0;bottom:0;height:24px;z-index:45;display:grid;place-items:center;cursor:pointer">
+        <div style="width:108px;height:4px;border-radius:2px;background:var(--color-neutral-800)"></div>
+      </div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;startScreen&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;onboard1&quot;,&quot;home&quot;,&quot;history&quot;,&quot;chat&quot;],&quot;default&quot;:&quot;onboard1&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;showHints&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+const MSGS = [
+  { id: 'm1', time: '10:02', src: 'Hey! Did you make it to London okay?', tr: { fr: 'Salut ! Tu es bien arrivé à Londres ?', es: '¡Hola! ¿Llegaste bien a Londres?', de: 'Hey! Bist du gut in London angekommen?', pt: 'Oi! Chegou bem em Londres?' } },
+  { id: 'm2', time: '10:04', out: true, src: "Oui, je viens d'arriver. On se retrouve où ?" },
+  { id: 'm3', time: '10:05', src: "I'll meet you at the café across from King's Cross station.", tr: { fr: "Je te retrouve au café en face de la gare de King's Cross.", es: "Te espero en la cafetería frente a la estación de King's Cross.", de: "Ich treffe dich im Café gegenüber vom Bahnhof King's Cross.", pt: "Te encontro no café em frente à estação de King's Cross." } },
+  { id: 'm4', time: '10:05', src: "Grab a flat white, they're really good there.", tr: { fr: 'Prends un flat white, ils sont vraiment bons là-bas.', es: 'Pide un flat white, ahí están muy buenos.', de: 'Nimm einen Flat White, die sind dort richtig gut.', pt: 'Pede um flat white, lá é muito bom.' } },
+  { id: 'm5', time: '10:06', out: true, src: "Parfait, j'arrive dans 20 minutes" },
+  { id: 'm6', time: '10:07', src: "And bring an umbrella, it's going to rain this afternoon.", tr: { fr: 'Et prends un parapluie, il va pleuvoir cet après-midi.', es: 'Y trae un paraguas, va a llover esta tarde.', de: 'Und nimm einen Regenschirm mit, heute Nachmittag regnet es.', pt: 'E leva um guarda-chuva, vai chover esta tarde.' } },
+];
+const LANGS = [
+  { k: 'fr', name: 'French', native: 'Français', reply: "D'accord, merci ! À tout de suite." },
+  { k: 'es', name: 'Spanish', native: 'Español', reply: '¡Vale, gracias! Hasta ahora.' },
+  { k: 'de', name: 'German', native: 'Deutsch', reply: 'Okay, danke! Bis gleich.' },
+  { k: 'pt', name: 'Portuguese', native: 'Português', reply: 'Beleza, obrigado! Até já.' },
+];
+const CANNED = "Okay, thanks! See you in a bit.";
+const SIZES = { S: 44, M: 52, L: 60 };
+const W = 360, H = 780;
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const now = () => { const d = new Date(); return d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); };
+
+class Component extends DCLogic {
+  state = { screen: this.props.startScreen ?? 'onboard1', lang: 'fr', bubbleOn: true, size: 'M', snap: true, bx: 302, by: 300, dragging: false, pressing: false, target: null, allT: false, translating: false, inline: {}, flash: null, menu: false, toast: null, history: [], sheet: false, perm: false, hint: this.props.showHints ?? true, copied: false, detail: null, replying: false, replyText: '', replyOut: '', replyBusy: false, draft: '', sent: [] };
+  screenRef = React.createRef();
+
+  componentDidUpdate(pp) {
+    if (pp.startScreen !== this.props.startScreen && this.props.startScreen) this.setState({ screen: this.props.startScreen });
+    if (pp.showHints !== this.props.showHints) this.setState({ hint: this.props.showHints ?? true });
+  }
+  componentWillUnmount() { clearTimeout(this.lt); clearTimeout(this.tt); clearTimeout(this.xt); clearTimeout(this.ft); }
+
+  bs() { return SIZES[this.state.size]; }
+  scale() { const s = this.screenRef.current; return s ? s.getBoundingClientRect().width / s.offsetWidth : 1; }
+  lang() { return LANGS.find(l => l.k === this.state.lang); }
+  showToast(text, action) { clearTimeout(this.tt); this.setState({ toast: { text, action } }); this.tt = setTimeout(() => this.setState({ toast: null }), 3500); }
+  logHistory(ids) {
+    const l = this.lang(), t = now();
+    const items = ids.map(id => { const m = MSGS.find(x => x.id === id); return { key: id + l.k, src: m.src, tr: m.tr[l.k], pair: 'EN → ' + l.k.toUpperCase(), app: 'Chatter', time: t }; });
+    this.setState(s => ({ history: [...items.reverse(), ...s.history.filter(h => !items.some(i => i.key === h.key))] }));
+  }
+
+  translateAll = () => {
+    clearTimeout(this.xt);
+    if (this.state.allT) { this.setState({ allT: false, inline: {}, menu: false }); this.showToast('Showing original text', null); return; }
+    this.setState({ translating: true, hint: false, menu: false, toast: null });
+    this.xt = setTimeout(() => {
+      this.setState({ translating: false, allT: true });
+      const ids = MSGS.filter(m => !m.out).map(m => m.id);
+      this.logHistory(ids);
+      this.showToast(`${ids.length} messages · English → ${this.lang().name}`, { label: 'Show original', fn: this.translateAll });
+    }, 700);
+  };
+  translateOne(id) {
+    if (this.state.allT || this.state.inline[id]) { this.openDetail(id); return; }
+    clearTimeout(this.ft);
+    this.setState(s => ({ inline: { ...s.inline, [id]: true }, flash: id, hint: false }));
+    this.ft = setTimeout(() => this.setState({ flash: null }), 900);
+    this.logHistory([id]);
+    this.showToast(`Translated · English → ${this.lang().name}`, { label: 'Undo', fn: () => this.setState(s => { const i = { ...s.inline }; delete i[id]; return { inline: i, toast: null }; }) });
+  }
+  openDetail(id) { this.setState({ detail: id, replying: false, replyText: this.lang().reply, replyOut: '', copied: false, menu: false, toast: null }); }
+
+  translateReply = async () => {
+    const text = this.state.replyText.trim(); if (!text) return;
+    this.setState({ replyBusy: true });
+    let out = text === this.lang().reply ? CANNED : null;
+    if (!out) {
+      try { out = (await window.claude.complete(`Translate this chat message into natural, casual English. Reply with the translation only.\n\n${text}`)).trim(); }
+      catch (_) { out = CANNED; }
+    }
+    this.setState({ replyOut: out, replyBusy: false });
+  };
+
+  down = e => {
+    e.preventDefault();
+    try { e.currentTarget.setPointerCapture(e.pointerId); } catch (_) {}
+    this.d = { sx: e.clientX, sy: e.clientY, bx: this.state.bx, by: this.state.by, moved: false, long: false, sc: this.scale() };
+    this.setState({ pressing: true, menu: false });
+    this.lt = setTimeout(() => { if (this.d) this.d.long = true; this.setState({ pressing: false }); this.translateAll(); }, 550);
+  };
+  move = e => {
+    const d = this.d; if (!d || d.long) return;
+    const dx = (e.clientX - d.sx) / d.sc, dy = (e.clientY - d.sy) / d.sc;
+    if (!d.moved && Math.hypot(dx, dy) < 6) return;
+    if (!d.moved) { d.moved = true; clearTimeout(this.lt); this.setState({ pressing: false, dragging: true, hint: false }); }
+    const s = this.bs();
+    const el = document.elementsFromPoint(e.clientX, e.clientY).find(n => n.dataset && n.dataset.msg);
+    const id = el && el.dataset.msg; const m = id && MSGS.find(x => x.id === id);
+    this.setState({ bx: clamp(d.bx + dx, 0, W - s), by: clamp(d.by + dy, 36, H - s - 30), target: m && !m.out ? id : null });
+  };
+  up = () => {
+    const d = this.d; this.d = null; clearTimeout(this.lt);
+    if (!d) return;
+    if (d.long) { this.setState({ pressing: false }); return; }
+    if (d.moved) {
+      const t = this.state.target, s = this.bs();
+      const upd = { dragging: false, target: null };
+      if (this.state.snap) upd.bx = this.state.bx + s / 2 < W / 2 ? 6 : W - s - 6;
+      this.setState(upd);
+      if (t) this.translateOne(t);
+    } else this.setState(st => ({ pressing: false, menu: !st.menu, hint: false }));
+  };
+
+  renderVals() {
+    const st = this.state, s = this.bs(), l = this.lang(), code = l.k.toUpperCase();
+    const onApp = st.screen === 'chat';
+    const tog = on => ({ just: on ? 'flex-end' : 'flex-start', track: on ? 'var(--color-accent)' : 'transparent', knob: on ? 'var(--color-bg)' : 'var(--color-neutral-500)' });
+    const bT = tog(st.bubbleOn), sT = tog(st.snap);
+    const msgs = MSGS.map(m => {
+      const tr = !m.out && (st.allT || st.inline[m.id]);
+      return { id: m.id, out: !!m.out, inc: !m.out, viaRelay: false, time: m.time, text: tr ? m.tr[st.lang] : m.src, tag: !!tr, tagText: `Translated · EN → ${code}`,
+        border: tr ? 'var(--color-accent)' : 'var(--color-divider)', cursor: tr ? 'pointer' : 'default',
+        outline: st.target === m.id || st.flash === m.id ? '2px solid var(--color-accent)' : '2px solid transparent',
+        dim: st.translating && !m.out ? 0.35 : 1, open: tr ? () => this.openDetail(m.id) : undefined };
+    }).concat(st.sent.map((t, i) => ({ id: 's' + i, out: true, inc: false, viaRelay: true, time: t.time, text: t.text })));
+    const dm = st.detail && MSGS.find(x => x.id === st.detail);
+    const R = s / 2 + 4, C = 2 * Math.PI * R;
+    const onRight = st.bx + s / 2 > W / 2;
+    const go = screen => () => this.setState({ screen, sheet: false, menu: false, detail: null });
+    return {
+      screenRef: this.screenRef,
+      isOb1: st.screen === 'onboard1', isOb2: st.screen === 'onboard2', isPerm: st.screen === 'perm', isHome: st.screen === 'home', isHist: st.screen === 'history', isChat: onApp,
+      goOb1: go('onboard1'), goOb2: go('onboard2'), goPerm: go('perm'), goHome: go('home'), goChat: go('chat'), goHist: go('history'),
+      navPill: () => { if (onApp || st.screen === 'history') this.setState({ screen: 'home', menu: false, detail: null }); },
+      permJust: st.perm ? 'flex-end' : 'flex-start', permTrack: st.perm ? 'var(--color-accent-700)' : 'var(--color-neutral-400)',
+      grantPerm: () => { this.setState({ perm: true }); setTimeout(() => this.setState({ screen: 'home' }), 650); },
+      bubbleStatus: st.bubbleOn ? 'Bubble on' : 'Bubble off',
+      langName: l.name, langCode: code,
+      openSheet: () => this.setState({ sheet: true }), closeSheet: () => this.setState({ sheet: false }), sheet: st.sheet,
+      langs: LANGS.map(x => ({ name: x.name, native: x.native, mark: x.k === st.lang ? 'Selected' : '', pick: () => this.setState({ lang: x.k, sheet: false }) })),
+      toggleBubble: () => this.setState(x => ({ bubbleOn: !x.bubbleOn })), bubbleJust: bT.just, bubbleTrack: bT.track, bubbleKnob: bT.knob,
+      toggleSnap: () => this.setState(x => ({ snap: !x.snap })), snapJust: sT.just, snapTrack: sT.track, snapKnob: sT.knob,
+      sizeS: st.size === 'S', sizeM: st.size === 'M', sizeL: st.size === 'L',
+      setS: () => this.setState({ size: 'S', bx: Math.min(st.bx, W - 50) }), setM: () => this.setState({ size: 'M', bx: Math.min(st.bx, W - 58) }), setL: () => this.setState({ size: 'L', bx: Math.min(st.bx, W - 66) }),
+      history: st.history, noHistory: st.history.length === 0, hasHistory: st.history.length > 0,
+      histCount: st.history.length ? `${st.history.length} today` : 'Empty', clearHist: () => this.setState({ history: [] }),
+      msgs, barW: st.translating ? '100%' : '0%', barT: st.translating ? 'width 650ms ease-out' : 'none',
+      draftText: st.draft || 'Message', draftColor: st.draft ? 'var(--color-text)' : 'var(--color-neutral-600)', hasDraft: !!st.draft, noDraft: !st.draft,
+      sendDraft: () => { if (st.draft) this.setState(x => ({ sent: [...x.sent, { text: x.draft, time: now() }], draft: '' })); },
+      toast: !!st.toast, toastText: st.toast ? st.toast.text : '', toastUndo: !!(st.toast && st.toast.action), toastAction: st.toast && st.toast.action ? st.toast.action.label : '',
+      undoToast: () => { const a = st.toast && st.toast.action; this.setState({ toast: null }); if (a) a.fn(); },
+      menu: st.menu, menuLeft: (onRight ? st.bx - 198 : st.bx + s + 8) + 'px', menuTop: clamp(st.by - 8, 40, H - 230) + 'px',
+      menuTransLabel: st.allT ? 'Show original' : 'Translate screen', menuTranslate: () => { this.setState({ menu: false }); this.translateAll(); },
+      menuSettings: () => this.setState({ screen: 'home', menu: false, sheet: true }),
+      hideBubble: () => this.setState({ bubbleOn: false, menu: false, screen: 'home' }),
+      showHint: onApp && st.hint && st.bubbleOn && !st.dragging && !st.menu, hintLeft: (onRight ? st.bx - 212 : st.bx + s + 12) + 'px', hintTop: (st.by - 6) + 'px',
+      showBubble: st.bubbleOn && !st.detail, down: this.down, move: this.move, up: this.up,
+      bLeft: st.bx + 'px', bTop: st.by + 'px', bSize: s + 'px', iconSize: Math.round(s * 0.46),
+      bTrans: st.dragging ? 'transform .15s' : 'left .25s ease-out, top .25s ease-out, transform .15s',
+      bScale: st.dragging ? (st.target ? 'scale(1.18)' : 'scale(1.08)') : st.pressing ? 'scale(0.94)' : 'scale(1)',
+      bFill: st.target ? 'var(--color-accent-700)' : 'var(--color-accent)',
+      ringBox: s + 12, ringC: (s + 12) / 2, ringR: R, ringDash: C, ringOff: st.pressing ? 0 : C, ringTrans: st.pressing ? 'stroke-dashoffset 550ms linear' : 'none',
+      detail: !!dm, dTr: dm ? dm.tr[st.lang] : '', dSrc: dm ? dm.src : '',
+      closeDetail: () => this.setState({ detail: null }),
+      copyLabel: st.copied ? 'Copied' : 'Copy', copyDetail: () => this.setState({ copied: true }),
+      revertDetail: () => this.setState(x => { const i = { ...x.inline }; delete i[x.detail]; return { inline: i, allT: false, detail: null }; }),
+      replying: st.replying, notReplying: !st.replying, startReply: () => this.setState({ replying: true }),
+      replyText: st.replyText, onReply: e => this.setState({ replyText: e.target.value, replyOut: '' }),
+      replyOut: st.replyOut, hasReplyOut: !!st.replyOut, noReplyOut: !st.replyOut, replyBusy: st.replyBusy,
+      translateLabel: st.replyBusy ? 'Translating…' : 'Translate to English', doTranslateReply: this.translateReply,
+      pasteReply: () => { this.setState(x => ({ draft: x.replyOut, detail: null, replying: false })); this.showToast('Pasted into Chatter · tap send', null); },
+    };
+  }
+}
+</script>
+</body>
+</html>
