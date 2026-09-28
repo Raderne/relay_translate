@@ -93,6 +93,52 @@ class RelayType {
     color: RelayColors.accent800,
   );
 
+  /// Home translate-into card language name (prototype 36 px).
+  static final langDisplay = TextStyle(
+    fontFamily: RelayFonts.heading,
+    fontWeight: FontWeight.w600,
+    fontSize: 36,
+    height: 1.1,
+    letterSpacing: -0.015 * 36,
+    color: RelayColors.text,
+  );
+
+  static const cardCaption = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 13,
+    height: 1.4,
+    color: RelayColors.neutral700,
+  );
+
+  static const rowLabel = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 15,
+    height: 1.35,
+    color: RelayColors.text,
+  );
+
+  static const sheetRow = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 16,
+    height: 1.35,
+    color: RelayColors.text,
+  );
+
+  static const sheetNative = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 13,
+    height: 1.35,
+    color: RelayColors.neutral600,
+  );
+
+  static final sheetMark = TextStyle(
+    fontFamily: RelayFonts.heading,
+    fontWeight: FontWeight.w600,
+    fontSize: 13,
+    height: 1.2,
+    color: RelayColors.accent700,
+  );
+
   static TextStyle _heading(double size) => TextStyle(
     fontFamily: RelayFonts.heading,
     fontWeight: FontWeight.w600,

@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 
 /// Overlay and accessibility, plus the first-run flag.
 ///
-/// `onboarded` is a file in the app files directory until Phase 4's sqflite
-/// `settings` row replaces it. Do not add `shared_preferences` for this.
+/// `onboarded` in [PermissionStatus] reflects a legacy files-dir flag until it is
+/// migrated into sqflite (`SettingsStore`). Routing uses the database, not this field.
 class PermissionStatus {
   const PermissionStatus({required this.overlay, required this.accessibility, required this.onboarded});
 
@@ -70,6 +70,9 @@ class Permissions {
   Future<void> openAccessibility() => _channel.invokeMethod<void>('openAccessibility');
 
   Future<void> setOnboarded() => _channel.invokeMethod<void>('setOnboarded');
+
+  /// Removes `filesDir/onboarded` after the flag lives in SQLite.
+  Future<void> clearOnboardedFile() => _channel.invokeMethod<void>('clearOnboarded');
 }
 
 class PermissionsController extends ChangeNotifier {
@@ -83,9 +86,9 @@ class PermissionsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> markOnboarded() async {
-    await permissions.setOnboarded();
-    status = PermissionStatus(overlay: status.overlay, accessibility: status.accessibility, onboarded: true);
+  void syncOnboardedFromSettings(bool onboarded) {
+    if (status.onboarded == onboarded) return;
+    status = PermissionStatus(overlay: status.overlay, accessibility: status.accessibility, onboarded: onboarded);
     notifyListeners();
   }
 }

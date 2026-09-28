@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../data/settings_store.dart';
 import '../native/permissions.dart';
 import '../routes.dart';
 import '../theme/theme.dart';
@@ -85,7 +86,10 @@ class _Onboard2ScreenState extends State<Onboard2Screen> with WidgetsBindingObse
     final scope = RelayScope.of(context);
     await scope.refresh();
     if (!mounted || gen != _gen || !scope.status.ready) return;
-    await scope.markOnboarded();
+    final settings = SettingsScope.of(context);
+    await settings.setOnboarded(true);
+    await scope.permissions.clearOnboardedFile();
+    scope.syncOnboardedFromSettings(true);
     await Future<void>.delayed(permissionGrantDelay);
     if (!mounted || gen != _gen) return;
     Navigator.of(context).pushNamedAndRemoveUntil(AppRoutes.home, (_) => false);

@@ -16,6 +16,7 @@ Maintained by Claude. Entry point for the vault.
 - [[Translation Pipeline]] — ML Kit on-device: batch language-id → model download → translate; Phase 10 evaluation gate
 - [[Privacy and Permissions]] — permissions, user-facing promises, disclosure text
 - [[Design System - Industry]] — blueprint visual language and Flutter port rules
+- [[Deviations from Prototype]] — intentional UI/copy differences from the Claude Design file
 - [[Phases Roadmap]] — phase list + status, points to `phases/`
 
 ## Sources

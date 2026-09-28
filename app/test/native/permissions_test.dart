@@ -30,12 +30,12 @@ void main() {
     expect(status.ready, isFalse);
   });
 
-  test('open and setOnboarded call the matching methods', () async {
+  test('open settings and clear legacy onboarded file', () async {
     mock((_) => null);
     await permissions.openOverlay();
     await permissions.openAccessibility();
-    await permissions.setOnboarded();
-    expect(calls.map((c) => c.method), ['openOverlay', 'openAccessibility', 'setOnboarded']);
+    await permissions.clearOnboardedFile();
+    expect(calls.map((c) => c.method), ['openOverlay', 'openAccessibility', 'clearOnboarded']);
   });
 
   test('next step is overlay, then disclosure, then home', () {

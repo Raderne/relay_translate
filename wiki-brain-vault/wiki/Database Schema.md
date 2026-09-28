@@ -1,11 +1,10 @@
 # Database Schema
 
-The sqflite database does not exist yet. Definitions are the plan in `phases/04-settings-local-db.md`
-(device) and `phases/12-azure-fallback.md` (server, conditional).
+`relay.db` lives in the app documents directory (`app/lib/data/db.dart` opens it via sqflite).
+Phase 12 server SQLite is still conditional (`phases/12-azure-fallback.md`).
 
-Until that database exists, `onboarded` is a file at `context.filesDir/onboarded`, written by
-`relay/permissions` `setOnboarded` once both permissions are granted ([[Privacy and Permissions]]).
-Phase 4 should copy that flag into the `settings` row and stop using the file.
+`onboarded` is a row in `settings`. On first launch after Phase 4, `main.dart` copies the legacy
+`filesDir/onboarded` flag if it exists, then deletes it via `relay/permissions` `clearOnboarded`.
 
 ## Device: `relay.db` via `sqflite` (the only DB in the current plan)
 | Table | Columns | Notes |

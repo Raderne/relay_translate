@@ -60,7 +60,7 @@ one line here (ML Kit supports ~59).
 
 ## Exit criteria
 
-- [ ] Every control persists across app kill/restart.
-- [ ] Sheet open/close/scrim matches prototype.
-- [ ] Unit test: `SettingsStore` round-trips each key through an in-memory sqflite (`sqflite_common_ffi`).
-- [ ] Wiki `Flutter App` + `Database Schema` (device section) updated.
+- [x] Every control persists across app kill/restart.
+- [x] Sheet open/close/scrim matches prototype.
+- [x] Unit test: `SettingsStore` round-trips each key through an in-memory sqflite (`sqflite_common_ffi`).
+- [x] Wiki `Flutter App` + `Database Schema` (device section) updated.

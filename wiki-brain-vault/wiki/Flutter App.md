@@ -2,7 +2,8 @@
 
 Lives in `app/`. Android only, `minSdk 26`, flavors `beta` and `prod`.
 
-`main.dart` reads `relay/permissions` `status()` and opens Onboard 1, or Home when `onboarded` is set.
+`main.dart` opens `SettingsStore` (sqflite), migrates a legacy onboarded file if needed, then routes to
+Onboard 1 or Home from `settings.onboarded`. Overlay/accessibility still come from `relay/permissions`.
 `RelayTheme.data` wraps the app. The design-system gallery (`screens/gallery.dart`, [[Design System - Industry]])
 is a debug-only route from Home (`/gallery`); the gallery still links to the ML Kit spike.
 
@@ -14,7 +15,7 @@ app/lib/
 ├── routes.dart
 ├── screens/   onboarding.dart, home_screen.dart (stub), gallery (debug), spike
 ├── bubble/    bubble_controller.dart       → [[Bubble Interaction Model]]
-├── data/      db.dart (sqflite)            → [[Database Schema]]
+├── data/      db.dart, settings_store.dart, languages.dart → [[Database Schema]]
 └── native/    translator.dart, permissions.dart (overlay.dart still planned)
 ```
 
@@ -30,7 +31,7 @@ app/lib/
 | Channel | Methods / events | Phase |
 |---|---|---|
 | `relay/translate` | `translate(texts, target)`, `ensureModel`, `modelStatus`, `deleteModel` | 1 |
-| `relay/permissions` | `status` → `{overlay, accessibility, onboarded}`, `openOverlay`, `openAccessibility`, `setOnboarded` | 3 ✅ |
+| `relay/permissions` | `status` → `{overlay, accessibility, onboarded}`, `openOverlay`, `openAccessibility`, `clearOnboarded` | 3 ✅ |
 | `relay/overlay` | `start(settings)`, `stop`, `update`, `isRunning` | 7 |
 | `relay/overlay/events` | `positionChanged`, `menu:*`, `translated` | 7–8 |
 

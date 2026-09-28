@@ -18,7 +18,8 @@ import java.io.File
  *
  * - `status` → `{overlay, accessibility, onboarded}`
  * - `openOverlay` / `openAccessibility` → null
- * - `setOnboarded` → null
+ * - `setOnboarded` → null (legacy; prefer SQLite `onboarded`)
+ * - `clearOnboarded` → null (delete files-dir flag after migration)
  */
 class PermissionsChannel(
     private val activity: FlutterActivity,
@@ -47,6 +48,10 @@ class PermissionsChannel(
             }
             "setOnboarded" -> {
                 onboardedFile.writeText("1")
+                result.success(null)
+            }
+            "clearOnboarded" -> {
+                if (onboardedFile.exists()) onboardedFile.delete()
                 result.success(null)
             }
             else -> result.notImplemented()

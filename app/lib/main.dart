@@ -1,39 +1,58 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'data/settings_store.dart';
 import 'native/permissions.dart';
 import 'screens/gallery.dart';
 import 'screens/home_screen.dart';
+import 'routes.dart';
 import 'screens/onboarding.dart';
+import 'screens/phase_placeholder.dart';
 import 'theme/theme.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final permissions = Permissions();
-  final status = await permissions.status();
-  runApp(RelayApp(controller: PermissionsController(permissions, status)));
+  final permissionStatus = await permissions.status();
+  final settings = await SettingsStore.open();
+  await settings.adoptLegacyOnboardedFile(permissionStatus.onboarded);
+  if (settings.onboarded) {
+    await permissions.clearOnboardedFile();
+  }
+  runApp(
+    RelayApp(
+      controller: PermissionsController(permissions, permissionStatus),
+      settings: settings,
+    ),
+  );
 }
 
 class RelayApp extends StatelessWidget {
-  const RelayApp({required this.controller, super.key});
+  const RelayApp({required this.controller, required this.settings, super.key});
 
   final PermissionsController controller;
+  final SettingsStore settings;
 
   @override
   Widget build(BuildContext context) {
-    final start = controller.status.onboarded ? HomeScreen.route : Onboard1Screen.route;
+    final start = settings.onboarded ? HomeScreen.route : Onboard1Screen.route;
     return RelayScope(
       controller: controller,
-      child: MaterialApp(
-        title: 'Relay Translate',
-        theme: RelayTheme.data,
-        initialRoute: start,
-        routes: {
-          Onboard1Screen.route: (_) => const Onboard1Screen(),
-          Onboard2Screen.route: (_) => const Onboard2Screen(),
-          HomeScreen.route: (_) => const HomeScreen(),
-          if (kDebugMode) GalleryScreen.route: (_) => const GalleryScreen(),
-        },
+      child: SettingsScope(
+        store: settings,
+        child: MaterialApp(
+          title: 'Relay Translate',
+          theme: RelayTheme.data,
+          initialRoute: start,
+          routes: {
+            Onboard1Screen.route: (_) => const Onboard1Screen(),
+            Onboard2Screen.route: (_) => const Onboard2Screen(),
+            HomeScreen.route: (_) => const HomeScreen(),
+            AppRoutes.history: (_) => PhasePlaceholderScreen.history(),
+            AppRoutes.chatter: (_) => PhasePlaceholderScreen.chatter(),
+            if (kDebugMode) GalleryScreen.route: (_) => const GalleryScreen(),
+          },
+        ),
       ),
     );
   }

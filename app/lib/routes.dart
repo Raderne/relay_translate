@@ -4,4 +4,6 @@ abstract final class AppRoutes {
   static const onboard2 = '/onboard2';
   static const home = '/home';
   static const gallery = '/gallery';
+  static const history = '/history';
+  static const chatter = '/chatter';
 }
