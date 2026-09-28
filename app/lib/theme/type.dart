@@ -47,6 +47,52 @@ class RelayType {
     letterSpacing: -0.21,
   );
 
+  /// Onboard primary actions: 48 px tall, 17 px condensed.
+  static const cta = TextStyle(
+    fontFamily: RelayFonts.heading,
+    fontWeight: FontWeight.w600,
+    fontSize: 17,
+    height: 1.2,
+    letterSpacing: -0.255,
+  );
+
+  /// Onboard permission numbers (01 / 02).
+  static final step = TextStyle(
+    fontFamily: RelayFonts.heading,
+    fontWeight: FontWeight.w600,
+    fontSize: 18,
+    height: 1.1,
+    color: RelayColors.accent700,
+  );
+
+  /// Prototype onboard H1 is 40 px; the scale's [h1] stays 42.
+  static final onboardTitle = _heading(40);
+
+  /// Home wordmark. The settings screen's nav brand is 24 px.
+  static final brand = _heading(24);
+
+  static const bodyMuted = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontWeight: FontWeight.w400,
+    fontSize: 15,
+    height: 1.55,
+    color: RelayColors.neutral800,
+  );
+
+  static const row = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 14,
+    height: 1.35,
+    color: RelayColors.text,
+  );
+
+  static const caption = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 11,
+    height: 1.2,
+    color: RelayColors.accent800,
+  );
+
   static TextStyle _heading(double size) => TextStyle(
     fontFamily: RelayFonts.heading,
     fontWeight: FontWeight.w600,

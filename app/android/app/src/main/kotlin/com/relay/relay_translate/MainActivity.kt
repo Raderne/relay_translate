@@ -11,15 +11,19 @@ class MainActivity : FlutterActivity() {
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
     private var translator: Translator? = null
     private var translateChannel: TranslateChannel? = null
+    private var permissionsChannel: PermissionsChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
+        val messenger = flutterEngine.dartExecutor.binaryMessenger
         val translator = Translator(this).also { translator = it }
-        translateChannel = TranslateChannel(flutterEngine.dartExecutor.binaryMessenger, translator, scope)
+        translateChannel = TranslateChannel(messenger, translator, scope)
+        permissionsChannel = PermissionsChannel(this, messenger)
     }
 
     override fun onDestroy() {
         translateChannel?.dispose()
+        permissionsChannel?.dispose()
         scope.cancel()
         translator?.close()
         super.onDestroy()

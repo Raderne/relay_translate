@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="accessibility_description">Relay reads on-screen text only when you hold or drop the bubble, and pastes replies you write. Translation happens on your phone.</string>
+</resources>

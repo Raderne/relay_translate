@@ -8,7 +8,7 @@ The build plan lives in `phases/` (one file per phase, each with tasks + exit cr
 | 0 | Foundations | `phases/00-foundations.md` | done (2026-09-27) |
 | 1 | On-device translation (ML Kit) | `phases/01-on-device-translation.md` | done (2026-09-27) |
 | 2 | Flutter shell + design system | `phases/02-flutter-design-system.md` | done (2026-09-27) |
-| 3 | Onboarding + permissions | `phases/03-onboarding-permissions.md` | not started |
+| 3 | Onboarding + permissions | `phases/03-onboarding-permissions.md` | done (2026-09-28) |
 | 4 | Settings + local DB | `phases/04-settings-local-db.md` | not started |
 | 5 | Chatter demo + in-app bubble | `phases/05-chatter-demo.md` | not started |
 | 6 | History | `phases/06-history.md` | not started |
@@ -26,5 +26,7 @@ Update the Status column when a phase's exit criteria are all met.
 ## Decision log
 - 2026-09-27: translation engine = Google ML Kit on-device for the tester beta; Azure Translator (via
   Node + SQLite backend) is the backup. Originally planned: an LLM via a backend. See [[Translation Pipeline]].
+- 2026-09-28: `onboarded` is a file at `filesDir/onboarded` until Phase 4's sqflite `settings` row replaces it.
+  No `shared_preferences`. See [[Database Schema]].
 
 Links: [[Relay Translate]], [[Architecture]], [[Gotcha - Play Accessibility Policy]]

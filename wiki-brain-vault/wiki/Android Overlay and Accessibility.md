@@ -1,7 +1,8 @@
 # Android Overlay and Accessibility
 
 Native Kotlin half of the app, in `app/android/app/src/main/kotlin/com/relay/relay_translate/`.
-`Translator` + `TranslateChannel` landed in Phase 1; the rest is planned for Phases 7–9.
+`Translator` + `TranslateChannel` landed in Phase 1. Phase 3 added `PermissionsChannel` (`relay/permissions`)
+and an empty `RelayAccessibilityService` so onboarding can enable it. The bubble is still Phases 7–9.
 
 ## Pieces
 | Class | Job | Phase |
@@ -10,7 +11,8 @@ Native Kotlin half of the app, in `app/android/app/src/main/kotlin/com/relay/rel
 | `BubbleService` | foreground service (`specialUse` type on Android 14+), owns overlay windows, notification with Hide | 7 |
 | `BubbleView` / `BubbleGesture` | the bubble + ring; gesture port of [[Bubble Interaction Model]] | 7 |
 | `MenuView`, `ToastView`, `HintView` | small overlay windows added on demand | 7 |
-| `RelayAccessibilityService` | reads the active window's node tree **only on hold/drop** | 8 |
+| `PermissionsChannel` | overlay + accessibility status, settings intents, `filesDir/onboarded` until Phase 4 | 3 ✅ |
+| `RelayAccessibilityService` | empty stub (Phase 3) so it can be enabled; reads the tree **only on hold/drop** | 8 |
 | `MessageExtractor` + `AppRules` | turn nodes into `[{id, text, bounds}]`, filter noise, per-app view ids | 8 |
 | `TranslationLayer` | draws translated boxes over message bounds; removed on scroll/window change | 8 |
 | `DetailActivity` | translucent Flutter activity hosting the detail/reply sheet over other apps | 9 |

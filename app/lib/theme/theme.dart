@@ -89,6 +89,11 @@ class RelayTheme {
           borderSide: BorderSide(color: RelayColors.accent),
         ),
       ),
+      dialogTheme: const DialogThemeData(
+        backgroundColor: RelayColors.bg,
+        surfaceTintColor: RelayColors.bg,
+        shape: square,
+      ),
       bottomSheetTheme: const BottomSheetThemeData(
         backgroundColor: RelayColors.bg,
         surfaceTintColor: RelayColors.bg,

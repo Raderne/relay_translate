@@ -73,6 +73,8 @@ class RelayButton extends StatelessWidget {
     this.label,
     this.icon,
     this.expand = false,
+    this.large = false,
+    this.height,
     this.preview,
     super.key,
   });
@@ -82,6 +84,7 @@ class RelayButton extends StatelessWidget {
     required VoidCallback? onPressed,
     Widget? icon,
     bool expand = false,
+    bool large = false,
     RelayPreview? preview,
     Key? key,
   }) => RelayButton._(
@@ -91,6 +94,7 @@ class RelayButton extends StatelessWidget {
     onPressed: onPressed,
     icon: icon,
     expand: expand,
+    large: large,
     preview: preview,
   );
 
@@ -115,9 +119,20 @@ class RelayButton extends StatelessWidget {
     required String label,
     required VoidCallback? onPressed,
     Widget? icon,
+    bool expand = false,
+    double? height,
     RelayPreview? preview,
     Key? key,
-  }) => RelayButton._(key: key, kind: _Kind.ghost, label: label, onPressed: onPressed, icon: icon, preview: preview);
+  }) => RelayButton._(
+    key: key,
+    kind: _Kind.ghost,
+    label: label,
+    onPressed: onPressed,
+    icon: icon,
+    expand: expand,
+    height: height,
+    preview: preview,
+  );
 
   factory RelayButton.icon({
     required Widget icon,
@@ -132,6 +147,12 @@ class RelayButton extends StatelessWidget {
   final Widget? icon;
   final VoidCallback? onPressed;
   final bool expand;
+
+  /// 48 px tall, [RelayType.cta]. Onboard primary actions.
+  final bool large;
+
+  /// Fixed height for a ghost row such as Back (40).
+  final double? height;
   final RelayPreview? preview;
 
   @override
@@ -192,33 +213,37 @@ class RelayButton extends StatelessWidget {
       );
     }
 
+    final fixedHeight = height ?? (large ? 48.0 : null);
     final content = Padding(
       padding: EdgeInsets.symmetric(
         horizontal: ghost ? RelaySpace.s1 : RelaySpace.s3 * 1.2,
-        vertical: RelaySpace.s2,
+        vertical: fixedHeight == null ? RelaySpace.s2 : 0,
       ),
       child: Row(
-        mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+        mainAxisSize: expand && fixedHeight == null ? MainAxisSize.max : MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           if (icon != null) ...[
             IconTheme(data: IconThemeData(color: fg, size: 18), child: icon!),
             const SizedBox(width: 6),
           ],
-          Text(label ?? '', style: RelayType.button.copyWith(color: fg)),
+          Text(label ?? '', style: (large ? RelayType.cta : RelayType.button).copyWith(color: fg)),
         ],
       ),
     );
+    final framedChild = fixedHeight == null
+        ? content
+        : SizedBox(height: fixedHeight, width: double.infinity, child: Center(child: content));
 
     if (primary) {
-      return Blueprint(borderColor: RelayColors.accent, fill: fill, child: content);
+      return Blueprint(borderColor: RelayColors.accent, fill: fill, child: framedChild);
     }
     return DecoratedBox(
       decoration: BoxDecoration(
         color: fill,
         border: ghost ? null : Border.all(color: RelayColors.divider),
       ),
-      child: content,
+      child: framedChild,
     );
   }
 }

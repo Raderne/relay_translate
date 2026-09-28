@@ -1,7 +1,11 @@
 # Database Schema
 
-Nothing exists yet. Definitions are the plan in `phases/04-settings-local-db.md` (device) and
-`phases/12-azure-fallback.md` (server, conditional).
+The sqflite database does not exist yet. Definitions are the plan in `phases/04-settings-local-db.md`
+(device) and `phases/12-azure-fallback.md` (server, conditional).
+
+Until that database exists, `onboarded` is a file at `context.filesDir/onboarded`, written by
+`relay/permissions` `setOnboarded` once both permissions are granted ([[Privacy and Permissions]]).
+Phase 4 should copy that flag into the `settings` row and stop using the file.
 
 ## Device: `relay.db` via `sqflite` (the only DB in the current plan)
 | Table | Columns | Notes |

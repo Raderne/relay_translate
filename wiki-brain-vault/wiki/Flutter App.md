@@ -2,19 +2,20 @@
 
 Lives in `app/`. Android only, `minSdk 26`, flavors `beta` and `prod`.
 
-Debug builds open `screens/gallery.dart` (the design-system gallery, [[Design System - Industry]]).
-Release builds still open the ML Kit spike (`screens/spike_screen.dart`, [[Translation Pipeline]])
-until the real screens land. `main.dart` applies `RelayTheme.data`.
+`main.dart` reads `relay/permissions` `status()` and opens Onboard 1, or Home when `onboarded` is set.
+`RelayTheme.data` wraps the app. The design-system gallery (`screens/gallery.dart`, [[Design System - Industry]])
+is a debug-only route from Home (`/gallery`); the gallery still links to the ML Kit spike.
 
 ## Planned layout
 ```
 app/lib/
 ├── main.dart
 ├── theme/     tokens + Blueprint widgets   → [[Design System - Industry]]
-├── screens/   onboarding, home, history, chatter, gallery (debug)
+├── routes.dart
+├── screens/   onboarding.dart, home_screen.dart (stub), gallery (debug), spike
 ├── bubble/    bubble_controller.dart       → [[Bubble Interaction Model]]
 ├── data/      db.dart (sqflite)            → [[Database Schema]]
-└── native/    translator.dart, overlay.dart, permissions.dart (MethodChannel/EventChannel)
+└── native/    translator.dart, permissions.dart (overlay.dart still planned)
 ```
 
 ## Conventions
@@ -29,7 +30,7 @@ app/lib/
 | Channel | Methods / events | Phase |
 |---|---|---|
 | `relay/translate` | `translate(texts, target)`, `ensureModel`, `modelStatus`, `deleteModel` | 1 |
-| `relay/permissions` | `status`, `openOverlay`, `openAccessibility` | 3 |
+| `relay/permissions` | `status` → `{overlay, accessibility, onboarded}`, `openOverlay`, `openAccessibility`, `setOnboarded` | 3 ✅ |
 | `relay/overlay` | `start(settings)`, `stop`, `update`, `isRunning` | 7 |
 | `relay/overlay/events` | `positionChanged`, `menu:*`, `translated` | 7–8 |
 

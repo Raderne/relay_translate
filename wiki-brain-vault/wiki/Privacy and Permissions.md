@@ -18,11 +18,17 @@
 - History stays on the device; Clear deletes it.
 - Beta flavor only: testers can export history JSON (contains message text) for evaluation. Removed from `prod`.
 
-## Prominent disclosure (draft, needed before accessibility settings)
+## Prominent disclosure (in the app, before accessibility settings)
+Shown only when the user taps "Open Android settings" and overlay is already granted. Overlay itself
+has no disclosure. Not now stays on Onboard 2 and does not open settings.
+
 "Relay uses Android's Accessibility service to read the text of messages on your screen, only when you
 hold the bubble or drop it on a message, and to paste replies you write into the app's message box.
 Translation happens on your phone. Your messages are not sent anywhere. Relay doesn't collect anything
 else from your screen." [Agree] [Not now]
+
+The string is `accessibilityDisclosure` in `app/lib/native/permissions.dart`. The service description
+in `res/values/strings.xml` is the shorter line Android shows in the accessibility list.
 
 See [[Gotcha - Play Accessibility Policy]].
 

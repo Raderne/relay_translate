@@ -17,7 +17,9 @@ and honest `isAccessibilityTool` (Relay = false).
 - Fallback if rejected: distribute outside Play, or reduce to overlay + "share/copy text into Relay"
   (no accessibility) — a big UX downgrade; decide with the product owner.
 
-## State (2026-09-27)
-Not started. Risk flagged in `phases/README.md`.
+## State (2026-09-28)
+Disclosure dialog and `isAccessibilityTool=false` are in the app (Phase 3). The service is an empty
+stub: it does not read the tree yet. The Play Console declaration and the internal-testing build are
+still due right after Phase 8.
 
 Links: [[Android Overlay and Accessibility]], [[Phases Roadmap]]

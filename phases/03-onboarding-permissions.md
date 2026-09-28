@@ -45,7 +45,7 @@ A tiny `MethodChannel('relay/permissions')` in `MainActivity.kt`: `status()` →
 
 ## Exit criteria
 
-- [ ] Fresh install walks Onboard 1 → 2 → real settings → back → Home automatically.
-- [ ] Revoking overlay permission in Android settings shows the warning on Home.
-- [ ] Back button behaviour matches prototype (Onboard 2 "Back" → Onboard 1).
-- [ ] Wiki `Screens and Flows` + `Privacy and Permissions` updated.
+- [x] Fresh install walks Onboard 1 → 2 → real settings → back → Home automatically.
+- [x] Revoking overlay permission in Android settings shows the warning on Home.
+- [x] Back button behaviour matches prototype (Onboard 2 "Back" → Onboard 1).
+- [x] Wiki `Screens and Flows` + `Privacy and Permissions` updated.

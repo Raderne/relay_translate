@@ -1,12 +1,15 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import '../routes.dart';
 import '../theme/theme.dart';
 import 'spike_screen.dart';
 
 /// Every design widget, in every state. Debug builds only — this stands in for Widgetbook.
 class GalleryScreen extends StatefulWidget {
   const GalleryScreen({super.key});
+
+  static const route = AppRoutes.gallery;
 
   @override
   State<GalleryScreen> createState() => _GalleryScreenState();
