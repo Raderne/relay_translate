@@ -34,6 +34,7 @@ app/lib/
 | `relay/translate` | `translate(texts, target)`, `ensureModel`, `modelStatus`, `deleteModel` | 1 |
 | `relay/permissions` | `status` → `{overlay, accessibility, onboarded}`, `openOverlay`, `openAccessibility`, `clearOnboarded` | 3 ✅ |
 | `relay/overlay` | `start(settings)`, `stop`, `update`, `isRunning` | 7 |
-| `relay/overlay/events` | `positionChanged`, `menu:*`, `translated` | 7–8 |
+| `relay/overlay/events` | `translated`, `toast` (menu events Phase 7) | 8 ✅ partial |
+| `relay/settings` | `sync` → native prefs for accessibility `Translator` | 8 ✅ |
 
 Links: [[Architecture]], [[Screens and Flows]], [[Android Overlay and Accessibility]]

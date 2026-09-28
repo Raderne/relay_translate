@@ -14,6 +14,7 @@ Maintained by Claude. Entry point for the vault.
 - [[Bubble Interaction Model]] — gesture state machine and every timing/size number (mirrored Dart ↔ Kotlin)
 - [[Screens and Flows]] — all screens and the 5 main user flows
 - [[Translation Pipeline]] — ML Kit on-device: batch language-id → model download → translate; Phase 10 evaluation gate
+- [[Per-App Message Rules]] — `AppRules.kt` view-id allow lists (WhatsApp, Gmail, Messages, …)
 - [[Privacy and Permissions]] — permissions, user-facing promises, disclosure text
 - [[Design System - Industry]] — blueprint visual language and Flutter port rules
 - [[Deviations from Prototype]] — intentional UI/copy differences from the Claude Design file

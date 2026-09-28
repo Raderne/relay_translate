@@ -13,7 +13,7 @@ The build plan lives in `phases/` (one file per phase, each with tasks + exit cr
 | 5 | Chatter demo + in-app bubble | `phases/05-chatter-demo.md` | code + tests done; emulator sign-off pending |
 | 6 | History | `phases/06-history.md` | done (2026-09-28) |
 | 7 | System overlay bubble | `phases/07-overlay-service.md` | not started |
-| 8 | Accessibility translate | `phases/08-accessibility-translate.md` | not started |
+| 8 | Accessibility translate | `phases/08-accessibility-translate.md` | code + JVM tests; Phase 7 bubble wiring + device matrix pending |
 | 9 | Reply + paste | `phases/09-reply-paste.md` | not started |
 | 10 | Tester beta + ML Kit evaluation (**decision gate**) | `phases/10-tester-beta.md` | not started |
 | 11 | Hardening | `phases/11-hardening.md` | not started |

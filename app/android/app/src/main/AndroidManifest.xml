@@ -30,7 +30,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!-- Stub until Phase 8. isAccessibilityTool is false in the xml config. -->
+        <!-- On-demand screen text for bubble hold/drop (Phase 8). isAccessibilityTool is false. -->
         <service
             android:name=".RelayAccessibilityService"
             android:exported="true"
@@ -41,7 +41,7 @@
             </intent-filter>
             <meta-data
                 android:name="android.accessibilityservice"
-                android:resource="@xml/accessibility_service_config" />
+                android:resource="@xml/relay_accessibility" />
         </service>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->

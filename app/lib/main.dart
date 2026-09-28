@@ -1,8 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
+import 'dart:async';
+
+import 'data/history_repository.dart';
 import 'data/settings_store.dart';
+import 'native/overlay_events.dart';
 import 'native/permissions.dart';
+import 'native/settings_bridge.dart';
 import 'screens/gallery.dart';
 import 'screens/home_screen.dart';
 import 'routes.dart';
@@ -20,6 +25,9 @@ Future<void> main() async {
   if (settings.onboarded) {
     await permissions.clearOnboardedFile();
   }
+  final history = await HistoryRepository.open();
+  await const NativeSettingsBridge().sync(settings);
+  OverlayEvents.listen(history);
   runApp(
     RelayApp(
       controller: PermissionsController(permissions, permissionStatus),

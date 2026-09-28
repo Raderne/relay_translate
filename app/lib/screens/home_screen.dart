@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../data/languages.dart';
 import '../data/settings_store.dart';
 import '../native/permissions.dart';
+import '../native/settings_bridge.dart';
 import '../native/translator.dart';
 import '../routes.dart';
 import '../theme/theme.dart';
@@ -94,6 +95,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
     if (code == null || !mounted) return;
     final settings = SettingsScope.of(context);
     await settings.setTargetLang(code);
+    await const NativeSettingsBridge().sync(settings);
     unawaited(widget.translator.ensureModel(code, wifiOnly: settings.wifiOnlyDownloads));
     await _refreshModelStatus();
   }

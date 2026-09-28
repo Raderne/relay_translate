@@ -68,4 +68,4 @@ service and flush on next app launch.
 - [ ] WhatsApp + Telegram + Google Messages: hold translates visible messages, drag translates one.
 - [ ] Boxes disappear on scroll; no stale overlays.
 - [ ] No tree reads happen except on hold/drop (verify with logs).
-- [ ] Unit tests for the noise filter + drop-target selection (plain JVM tests, nodes faked as data).
+- [x] Unit tests for the noise filter + drop-target selection (plain JVM tests, nodes faked as data).

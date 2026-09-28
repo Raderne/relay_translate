@@ -12,6 +12,8 @@ class MainActivity : FlutterActivity() {
     private var translator: Translator? = null
     private var translateChannel: TranslateChannel? = null
     private var permissionsChannel: PermissionsChannel? = null
+    private var settingsChannel: SettingsChannel? = null
+    private var overlayEventsChannel: OverlayEventsChannel? = null
 
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
@@ -19,11 +21,15 @@ class MainActivity : FlutterActivity() {
         val translator = Translator(this).also { translator = it }
         translateChannel = TranslateChannel(messenger, translator, scope)
         permissionsChannel = PermissionsChannel(this, messenger)
+        settingsChannel = SettingsChannel(this, messenger)
+        overlayEventsChannel = OverlayEventsChannel.install(messenger)
     }
 
     override fun onDestroy() {
         translateChannel?.dispose()
         permissionsChannel?.dispose()
+        settingsChannel?.dispose()
+        overlayEventsChannel?.dispose()
         scope.cancel()
         translator?.close()
         super.onDestroy()

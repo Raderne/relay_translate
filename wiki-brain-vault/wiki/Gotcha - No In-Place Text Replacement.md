@@ -12,8 +12,8 @@ Draw translated boxes in our own overlay exactly over each message node's `getBo
 with [[Design System - Industry]]. Remove them on scroll/window-change (they'd drift). Tapping a box
 opens the detail sheet.
 
-## State (2026-09-27)
-Design decision only; implementation in Phase 8 (`phases/08-accessibility-translate.md`).
+## State (2026-09-28)
+Implemented in Kotlin: `TranslationLayer` draws blueprint-styled boxes; cleared on scroll/window change.
 Open: whether to re-position boxes on scroll instead of removing them (later improvement).
 
 Links: [[Android Overlay and Accessibility]], [[Design Source]], [[Bubble Interaction Model]]

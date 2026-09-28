@@ -12,9 +12,11 @@ and an empty `RelayAccessibilityService` so onboarding can enable it. The bubble
 | `BubbleView` / `BubbleGesture` | the bubble + ring; gesture port of [[Bubble Interaction Model]] | 7 |
 | `MenuView`, `ToastView`, `HintView` | small overlay windows added on demand | 7 |
 | `PermissionsChannel` | overlay + accessibility status, settings intents, `filesDir/onboarded` until Phase 4 | 3 ✅ |
-| `RelayAccessibilityService` | empty stub (Phase 3) so it can be enabled; reads the tree **only on hold/drop** | 8 |
-| `MessageExtractor` + `AppRules` | turn nodes into `[{id, text, bounds}]`, filter noise, per-app view ids | 8 |
-| `TranslationLayer` | draws translated boxes over message bounds; removed on scroll/window change | 8 |
+| `RelayAccessibilityService` | on-demand tree read via [translateAllFromBubble] / [translateAtFromBubble]; invalidates overlays on window/scroll events | 8 ✅ |
+| `MessageExtractor`, `MessageTreeWalker`, `AppRules` | `[{id, text, bounds}]`, noise filter, per-app view ids — see [[Per-App Message Rules]] | 8 ✅ |
+| `TranslationLayer` | `TYPE_ACCESSIBILITY_OVERLAY` boxes + 2 dp progress line; `FLAG_NOT_TOUCHABLE` | 8 ✅ |
+| `OverlayEventsChannel` | `relay/overlay/events` → Dart history (`translated`); buffer when engine dead | 8 ✅ |
+| `NativeSettings` + `relay/settings` | target language + wifi-only for in-process `Translator` | 8 ✅ |
 | `DetailActivity` | translucent Flutter activity hosting the detail/reply sheet over other apps | 9 |
 | `Paster` | `ACTION_SET_TEXT` into the app's input; clipboard fallback; never sends | 9 |
 

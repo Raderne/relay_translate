@@ -34,3 +34,6 @@ Touched: Screens and Flows, Flutter App, Bubble Interaction Model, Phases Roadma
 
 ## [2026-09-28 22:10] session | Phase 6 History screen
 Touched: Screens and Flows, Flutter App, Phases Roadmap, phases/06-history.md
+
+## [2026-09-28 22:20] session | Phase 8 accessibility translate
+Touched: Android Overlay and Accessibility, Per-App Message Rules, Flutter App, Phases Roadmap, index
