@@ -172,6 +172,29 @@ class RelayType {
     color: RelayColors.accent700,
   );
 
+  /// History list: translated line (Barlow Condensed 600, 17 px).
+  static final historyTranslation = TextStyle(
+    fontFamily: RelayFonts.heading,
+    fontWeight: FontWeight.w600,
+    fontSize: 17,
+    height: 1.3,
+    color: RelayColors.text,
+  );
+
+  static const historySource = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 13,
+    height: 1.35,
+    color: RelayColors.neutral700,
+  );
+
+  static const historyTime = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 11,
+    height: 1.2,
+    color: RelayColors.neutral600,
+  );
+
   static TextStyle _heading(double size) => TextStyle(
     fontFamily: RelayFonts.heading,
     fontWeight: FontWeight.w600,

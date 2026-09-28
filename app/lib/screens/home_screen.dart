@@ -193,7 +193,10 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                         ),
                         _HistoryRow(
                           label: histLabel,
-                          onTap: () => Navigator.of(context).pushNamed(AppRoutes.history),
+                          onTap: () async {
+                            await Navigator.of(context).pushNamed(AppRoutes.history);
+                            if (mounted) await _loadHistoryCount();
+                          },
                         ),
                         if (kDebugMode) ...[
                           const SizedBox(height: 24),

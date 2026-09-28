@@ -27,6 +27,6 @@
 
 ## Exit criteria
 
-- [ ] Translating in Chatter populates History; duplicates move to top instead of repeating.
-- [ ] Clear empties list and Home shows "Empty".
-- [ ] Test: dedupe + retention cap on in-memory DB.
+- [x] Translating in Chatter populates History; duplicates move to top instead of repeating.
+- [x] Clear empties list and Home shows "Empty".
+- [x] Test: dedupe + retention cap on in-memory DB.

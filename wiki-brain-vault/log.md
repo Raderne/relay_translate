@@ -31,3 +31,6 @@ Touched: Screens and Flows, Flutter App, Database Schema, Deviations from Protot
 
 ## [2026-09-28 22:00] session | Phase 5 Chatter and bubble
 Touched: Screens and Flows, Flutter App, Bubble Interaction Model, Phases Roadmap, phases/05-chatter-demo.md
+
+## [2026-09-28 22:10] session | Phase 6 History screen
+Touched: Screens and Flows, Flutter App, Phases Roadmap, phases/06-history.md

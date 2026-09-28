@@ -11,7 +11,7 @@ The build plan lives in `phases/` (one file per phase, each with tasks + exit cr
 | 3 | Onboarding + permissions | `phases/03-onboarding-permissions.md` | done (2026-09-28) |
 | 4 | Settings + local DB | `phases/04-settings-local-db.md` | done (2026-09-28) |
 | 5 | Chatter demo + in-app bubble | `phases/05-chatter-demo.md` | code + tests done; emulator sign-off pending |
-| 6 | History | `phases/06-history.md` | not started |
+| 6 | History | `phases/06-history.md` | done (2026-09-28) |
 | 7 | System overlay bubble | `phases/07-overlay-service.md` | not started |
 | 8 | Accessibility translate | `phases/08-accessibility-translate.md` | not started |
 | 9 | Reply + paste | `phases/09-reply-paste.md` | not started |
