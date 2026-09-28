@@ -1,7 +1,8 @@
 # Bubble Interaction Model
 
 The single most important piece of behaviour. Implemented **twice** with identical numbers:
-- Dart `app/lib/bubble/bubble_controller.dart` (Chatter demo, Phase 5) — pure logic, unit-tested.
+- Dart `app/lib/bubble/bubble_controller.dart` + `bubble_tokens.dart` (Chatter demo, Phase 5) — pure logic;
+  covered by `test/bubble/bubble_controller_test.dart`.
 - Kotlin `BubbleGesture.kt` (system overlay, Phase 7) — line-for-line port.
 Each file must reference the other at the top; change both together.
 

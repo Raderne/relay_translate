@@ -30,6 +30,9 @@ class RelayType {
     color: RelayColors.text,
   );
 
+  /// Chatter toast on neutral-900 background.
+  static final toastOnDark = body.copyWith(fontSize: 13.5, color: RelayColors.neutral100);
+
   /// 11 px, Barlow 600, tracked uppercase. Accent-700 because accent-on-bg is ~3:1.
   static final kicker = TextStyle(
     fontFamily: RelayFonts.body,
@@ -129,6 +132,36 @@ class RelayType {
     fontSize: 13,
     height: 1.35,
     color: RelayColors.neutral600,
+  );
+
+  static const message = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 14.5,
+    height: 1.4,
+    color: RelayColors.text,
+  );
+
+  static const messageMeta = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 10.5,
+    height: 1.2,
+    color: RelayColors.neutral600,
+  );
+
+  static const messageTag = TextStyle(
+    fontFamily: RelayFonts.body,
+    fontSize: 10.5,
+    height: 1.2,
+    letterSpacing: 0.04 * 10.5,
+    color: RelayColors.accent700,
+  );
+
+  static final detailTranslation = TextStyle(
+    fontFamily: RelayFonts.heading,
+    fontWeight: FontWeight.w600,
+    fontSize: 24,
+    height: 1.2,
+    color: RelayColors.text,
   );
 
   static final sheetMark = TextStyle(

@@ -359,12 +359,13 @@ class RelaySegmented extends StatelessWidget {
 }
 
 class RelayInput extends StatefulWidget {
-  const RelayInput({this.controller, this.label, this.hint, this.maxLines = 1, super.key});
+  const RelayInput({this.controller, this.label, this.hint, this.maxLines = 1, this.onChanged, super.key});
 
   final TextEditingController? controller;
   final String? label;
   final String? hint;
   final int maxLines;
+  final ValueChanged<String>? onChanged;
 
   @override
   State<RelayInput> createState() => _RelayInputState();
@@ -400,6 +401,7 @@ class _RelayInputState extends State<RelayInput> {
         controller: widget.controller,
         focusNode: _focus,
         maxLines: widget.maxLines,
+        onChanged: widget.onChanged,
         cursorColor: RelayColors.accent,
         style: const TextStyle(fontFamily: RelayFonts.body, fontSize: 14, color: RelayColors.text),
         decoration: InputDecoration(

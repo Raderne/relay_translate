@@ -12,6 +12,11 @@ import '../theme/theme.dart';
 import 'gallery.dart';
 import 'language_sheet.dart';
 
+class HomeRouteArgs {
+  const HomeRouteArgs({this.openLanguageSheet = false});
+  final bool openLanguageSheet;
+}
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.translator = const Translator()});
 
@@ -27,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   ModelStatus? _modelStatus;
   Timer? _modelPoll;
   var _historyToday = 0;
+  var _openedLanguageFromRoute = false;
 
   @override
   void initState() {
@@ -37,6 +43,18 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       unawaited(_refreshModelStatus());
       unawaited(_loadHistoryCount());
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (!_openedLanguageFromRoute && args is HomeRouteArgs && args.openLanguageSheet) {
+      _openedLanguageFromRoute = true;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) unawaited(_pickLanguage());
+      });
+    }
   }
 
   @override

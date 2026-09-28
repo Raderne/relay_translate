@@ -98,5 +98,5 @@ texts, toast "Couldn't translate · Retry". Model download in progress → toast
 
 - [ ] Every interaction in the prototype reproducible in the app, with real ML Kit translations, including in airplane mode.
 - [ ] Changing language in Home changes the next translation target.
-- [ ] Controller tests pass.
+- [x] Controller tests pass.
 - [ ] Wiki `Bubble Interaction Model` updated with any deviations from the prototype.

@@ -28,3 +28,6 @@ Touched: Screens and Flows, Privacy and Permissions, Flutter App, Android Overla
 
 ## [2026-09-28 21:15] session | Phase 4 settings and SQLite
 Touched: Screens and Flows, Flutter App, Database Schema, Deviations from Prototype, Phases Roadmap, index
+
+## [2026-09-28 22:00] session | Phase 5 Chatter and bubble
+Touched: Screens and Flows, Flutter App, Bubble Interaction Model, Phases Roadmap, phases/05-chatter-demo.md

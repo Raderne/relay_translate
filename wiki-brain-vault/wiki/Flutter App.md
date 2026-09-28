@@ -13,9 +13,10 @@ app/lib/
 ├── main.dart
 ├── theme/     tokens + Blueprint widgets   → [[Design System - Industry]]
 ├── routes.dart
-├── screens/   onboarding.dart, home_screen.dart (stub), gallery (debug), spike
-├── bubble/    bubble_controller.dart       → [[Bubble Interaction Model]]
-├── data/      db.dart, settings_store.dart, languages.dart → [[Database Schema]]
+├── screens/   onboarding.dart, home_screen.dart, chatter_screen.dart, gallery (debug), spike
+├── chatter/   chatter_session.dart, chatter_models.dart
+├── bubble/    bubble_controller.dart, bubble_tokens.dart → [[Bubble Interaction Model]]
+├── data/      db.dart, settings_store.dart, history_repository.dart, chatter_seed.dart, languages.dart → [[Database Schema]]
 └── native/    translator.dart, permissions.dart (overlay.dart still planned)
 ```
 

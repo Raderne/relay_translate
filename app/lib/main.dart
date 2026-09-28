@@ -7,6 +7,7 @@ import 'screens/gallery.dart';
 import 'screens/home_screen.dart';
 import 'routes.dart';
 import 'screens/onboarding.dart';
+import 'screens/chatter_screen.dart';
 import 'screens/phase_placeholder.dart';
 import 'theme/theme.dart';
 
@@ -49,7 +50,7 @@ class RelayApp extends StatelessWidget {
             Onboard2Screen.route: (_) => const Onboard2Screen(),
             HomeScreen.route: (_) => const HomeScreen(),
             AppRoutes.history: (_) => PhasePlaceholderScreen.history(),
-            AppRoutes.chatter: (_) => PhasePlaceholderScreen.chatter(),
+            AppRoutes.chatter: (_) => const ChatterScreen(),
             if (kDebugMode) GalleryScreen.route: (_) => const GalleryScreen(),
           },
         ),
