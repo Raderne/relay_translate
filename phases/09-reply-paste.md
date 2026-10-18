@@ -30,4 +30,4 @@ that gets translated back and pasted into the app's input field.
 
 - [ ] WhatsApp: tap translated box → Reply → paste lands in the input, not sent.
 - [ ] Apps where SET_TEXT fails fall back to clipboard with the toast.
-- [ ] Wiki `Screens and Flows` gains the cross-app reply flow.
+- [x] Wiki `Screens and Flows` gains the cross-app reply flow.

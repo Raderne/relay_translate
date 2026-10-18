@@ -13,6 +13,7 @@ import '../data/chatter_seed.dart';
 import '../data/history_repository.dart';
 import '../data/languages.dart';
 import '../data/settings_store.dart';
+import '../detail/detail_sheet.dart';
 import '../routes.dart';
 import '../theme/theme.dart';
 import 'home_screen.dart';
@@ -649,146 +650,44 @@ class _ChatterToast extends StatelessWidget {
   }
 }
 
-class _DetailSheet extends StatefulWidget {
+/// Chatter's actions for the shared [DetailSheet].
+class _DetailSheet extends StatelessWidget {
   const _DetailSheet({required this.session});
   final ChatterSession session;
 
   @override
-  State<_DetailSheet> createState() => _DetailSheetState();
-}
-
-class _DetailSheetState extends State<_DetailSheet> {
-  final _replyController = TextEditingController();
-
-  @override
-  void dispose() {
-    _replyController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final session = widget.session;
     final m = session.messageById(session.detailMessageId);
     if (m == null) return const SizedBox.shrink();
     final settings = SettingsScope.of(context);
     final srcLang = m.sourceLang ?? 'und';
     final pair = '${langName(srcLang)} → ${langName(settings.targetLang)}';
 
-    return Stack(
-      children: [
-        GestureDetector(
-          onTap: session.closeDetail,
-          child: const ColoredBox(color: RelayColors.scrim, child: SizedBox.expand()),
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Material(
-            color: RelayColors.bg,
-            child: DecoratedBox(
-              decoration: const BoxDecoration(border: Border(top: BorderSide(color: RelayColors.divider))),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(child: Kicker('$pair · $kChatterLabel')),
-                        RelayButton.icon(
-                          icon: const RelayIcon(RelayIcons.x),
-                          onPressed: session.closeDetail,
-                          tooltip: 'Close',
-                        ),
-                      ],
-                    ),
-                    Text(m.display ?? m.src, style: RelayType.detailTranslation),
-                    const SizedBox(height: 12),
-                    Text('ORIGINAL', style: RelayType.h6.copyWith(color: RelayColors.neutral600)),
-                    Text(m.src, style: RelayType.bodyMuted.copyWith(fontSize: 14)),
-                    if (!session.detailReplyMode) ...[
-                      const SizedBox(height: 12),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RelayButton.secondary(
-                              label: 'Copy',
-                              onPressed: () async {
-                                await Clipboard.setData(ClipboardData(text: m.display ?? m.src));
-                                session.markCopied();
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: RelayButton.secondary(
-                              label: 'Show original',
-                              onPressed: () {
-                                session.revertMessage(m.id);
-                                session.revertAllIncoming();
-                                session.closeDetail();
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: RelayButton.primary(label: 'Reply', onPressed: session.startReply),
-                          ),
-                        ],
-                      ),
-                    ],
-                    if (session.detailReplyMode) ...[
-                      const SizedBox(height: 8),
-                      RelayInput(
-                        controller: _replyController,
-                        label: 'Your reply in ${langName(settings.targetLang)}',
-                        maxLines: 3,
-                        onChanged: session.setReplyDraft,
-                      ),
-                      if (session.replyTranslated != null) ...[
-                        const SizedBox(height: 8),
-                        Blueprint(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Kicker(langName(srcLang)),
-                                Text(session.replyTranslated!, style: RelayType.rowLabel),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
-                      const SizedBox(height: 8),
-                      Row(
-                        children: [
-                          Expanded(
-                            child: RelayButton.secondary(
-                              label: session.replyBusy ? 'Translating…' : 'Translate to ${langName(srcLang)}',
-                              onPressed: session.replyBusy ? null : () => unawaited(session.translateReply()),
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: RelayButton.primary(
-                              label: 'Paste into Chatter',
-                              onPressed: session.replyTranslated == null
-                                  ? null
-                                  : () => session.pasteReply(session.replyTranslated!),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return DetailSheet(
+      kicker: '$pair · $kChatterLabel',
+      translation: m.display ?? m.src,
+      original: m.src,
+      replyMode: session.detailReplyMode,
+      replyFieldLabel: 'Your reply in ${langName(settings.targetLang)}',
+      replyTranslated: session.replyTranslated,
+      replyLangLabel: langName(srcLang),
+      replyBusy: session.replyBusy,
+      translateLabel: 'Translate to ${langName(srcLang)}',
+      pasteLabel: 'Paste into Chatter',
+      onClose: session.closeDetail,
+      onCopy: () async {
+        await Clipboard.setData(ClipboardData(text: m.display ?? m.src));
+        session.markCopied();
+      },
+      onShowOriginal: () {
+        session.revertMessage(m.id);
+        session.revertAllIncoming();
+        session.closeDetail();
+      },
+      onReply: session.startReply,
+      onReplyChanged: session.setReplyDraft,
+      onTranslateReply: () => unawaited(session.translateReply()),
+      onPaste: () => session.pasteReply(session.replyTranslated!),
     );
   }
 }

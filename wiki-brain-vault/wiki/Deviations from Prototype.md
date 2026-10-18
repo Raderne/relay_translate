@@ -18,3 +18,16 @@ Not in the prototype. Bottom sheet on Home when a newer GitHub release exists: k
 "Version x.y.z", "Installed: …", release notes, buttons **Later** / **Update** (→ "Downloading n%" → **Install**).
 Errors: "Couldn't download the update. Try again." / "Allow Relay to install apps, then tap Install."
 See [[App Updates]].
+
+## System overlay bubble (Phase 7)
+
+No drop-target highlight while dragging over other apps, silent drops on nothing, smaller shadow, toast
+without action. Details and reasons: [[Bubble Interaction Model]] → "System overlay deviations".
+
+## Detail sheet over other apps (Phase 9)
+
+| Prototype | App |
+|---|---|
+| Tapping a message keeps the other translations on screen | Tapping a translated box **clears all boxes**, then opens the sheet. Accessibility overlays draw above every activity, so they would cover the sheet. Hold again to re-translate. |
+| Show original reverts that message | Closes the sheet (the boxes are already gone). |
+| Toasts inside the chat | Native overlay toast (bubble running) or Android system toast. |

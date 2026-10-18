@@ -25,7 +25,9 @@ object AppRules {
     fun accepts(packageName: String, viewIdResourceName: String?): Boolean {
         val rules = allowByPackage[packageName] ?: return true
         if (viewIdResourceName.isNullOrBlank()) return false
-        return rules.contains(viewIdResourceName)
+        // Compose apps (Google Messages) report the bare id ("message_text") without "pkg:id/".
+        val id = viewIdResourceName.substringAfter(":id/")
+        return rules.any { it.substringAfter(":id/") == id }
     }
 
     fun hasRules(packageName: String): Boolean = allowByPackage.containsKey(packageName)

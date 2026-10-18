@@ -3,8 +3,10 @@ package com.relay.relay_translate
 import android.accessibilityservice.AccessibilityService
 import android.view.accessibility.AccessibilityEvent
 import android.util.Log
+import android.widget.Toast
 import com.relay.relay_translate.accessibility.AccessibilityTranslateCoordinator
 import com.relay.relay_translate.accessibility.MessageExtractor
+import com.relay.relay_translate.accessibility.OverlayInvalidation
 import com.relay.relay_translate.bubble.BubbleService
 import com.relay.relay_translate.history.HistoryEventBuffer
 import com.relay.relay_translate.ui.TranslationLayer
@@ -24,13 +26,14 @@ class RelayAccessibilityService : AccessibilityService() {
     private val scope = CoroutineScope(job + Dispatchers.Main.immediate)
     private var translator: Translator? = null
     private var coordinator: AccessibilityTranslateCoordinator? = null
-    private val historyBuffer = HistoryEventBuffer(this)
+    // Lazy: the service has no Context until onCreate; building it as a field crashed on enable.
+    private val historyBuffer by lazy { HistoryEventBuffer(this) }
 
     override fun onServiceConnected() {
         super.onServiceConnected()
         instance = this
         val translator = Translator(applicationContext).also { translator = it }
-        val layer = TranslationLayer(this)
+        val layer = TranslationLayer(this) { box -> coordinator?.openDetail(box) }
         coordinator = AccessibilityTranslateCoordinator(
             service = this,
             scope = scope,
@@ -42,7 +45,8 @@ class RelayAccessibilityService : AccessibilityService() {
                     ?: historyBuffer.enqueue(item)
             },
             onToast = { msg ->
-                if (!BubbleService.toast(msg)) OverlayEventsChannel.instance?.emitToast(msg)
+                // Overlay toast when the bubble runs; else a system toast (Flutter can't show one over other apps).
+                if (!BubbleService.toast(msg)) Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
             },
         )
         OverlayEventsChannel.instance?.attachBuffer(historyBuffer)
@@ -51,11 +55,9 @@ class RelayAccessibilityService : AccessibilityService() {
 
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {
         if (event == null) return
-        when (event.eventType) {
-            AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED,
-            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED,
-            AccessibilityEvent.TYPE_VIEW_SCROLLED,
-            -> coordinator?.invalidateOverlays()
+        val c = coordinator ?: return
+        if (OverlayInvalidation.shouldClear(event.eventType, event.packageName?.toString(), packageName, c.shownPackage)) {
+            c.invalidateOverlays()
         }
     }
 
@@ -86,6 +88,13 @@ class RelayAccessibilityService : AccessibilityService() {
 
         fun clearFromBubble() {
             instance?.coordinator?.clearOverlays()
+        }
+
+        /** Phase 9: `DetailActivity` "Paste into <App>". False when the service is off (caller copies instead). */
+        fun pasteFromDetail(appPackage: String, appLabel: String, text: String): Boolean {
+            val c = instance?.coordinator ?: return false
+            c.paste(appPackage, appLabel, text)
+            return true
         }
 
         /** Called from the overlay bubble on drag-drop. */

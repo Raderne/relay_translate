@@ -1,13 +1,18 @@
 package com.relay.relay_translate.accessibility
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.pm.PackageManager
 import android.util.Log
 import android.accessibilityservice.AccessibilityService
+import com.relay.relay_translate.DetailActivity
 import com.relay.relay_translate.NativeSettings
 import com.relay.relay_translate.Translator
 import com.relay.relay_translate.extract.DropTargetSelector
 import com.relay.relay_translate.extract.ScreenMessage
 import com.relay.relay_translate.history.HistoryEventBuffer
+import com.relay.relay_translate.paste.Paster
+import com.relay.relay_translate.paste.awaitForeground
 import com.relay.relay_translate.ui.TranslatedOverlayBox
 import com.relay.relay_translate.ui.TranslationLayer
 import kotlinx.coroutines.CoroutineScope
@@ -23,7 +28,9 @@ class AccessibilityTranslateCoordinator(
     private val onToast: (String) -> Unit,
 ) {
     private var showing = false
+    private var shownApp: Pair<String, String>? = null // package, label of the boxes on screen
     val isShowing: Boolean get() = showing
+    val shownPackage: String? get() = shownApp?.first
 
     fun translateAll() {
         scope.launch { readAndTranslate(dropX = null, dropY = null) }
@@ -90,7 +97,7 @@ class AccessibilityTranslateCoordinator(
                     ),
                 )
                 val tag = "Translated · ${res.source.uppercase()} → ${targetLang.uppercase()}"
-                boxes += TranslatedOverlayBox(msg.bounds, res.text, tag)
+                boxes += TranslatedOverlayBox(msg.bounds, res.text, tag, original = msg.text, sourceLang = res.source)
             }
             layer.setProgress(false)
             if (boxes.isEmpty()) {
@@ -98,10 +105,49 @@ class AccessibilityTranslateCoordinator(
                 return
             }
             layer.show(boxes)
+            shownApp = appPackage to label
             showing = true
         } catch (e: Translator.TranslateException) {
             layer.setProgress(false)
             onToast("Couldn't translate · Retry")
+        }
+    }
+
+    /**
+     * Phase 9: a translated box was tapped. Boxes are cleared (silently) because they would draw over the
+     * sheet, then the detail sheet opens over the chat app.
+     */
+    fun openDetail(box: TranslatedOverlayBox) {
+        val (pkg, label) = shownApp ?: return
+        clearOverlays()
+        service.startActivity(
+            DetailActivity.intent(
+                service,
+                src = box.original,
+                tr = box.translation,
+                source = box.sourceLang,
+                target = NativeSettings.targetLang(service),
+                appLabel = label,
+                appPackage = pkg,
+                wifiOnly = NativeSettings.wifiOnly(service),
+            ),
+        )
+    }
+
+    /** "Paste into <App>": wait for the chat app to be back in front, fill its message box. Never sends. */
+    fun paste(appPackage: String, appLabel: String, text: String) {
+        scope.launch {
+            val back = awaitForeground(appPackage, timeoutMs = 2000, pollMs = 100) {
+                service.rootInActiveWindow?.packageName?.toString()
+            }
+            val root = if (back) service.rootInActiveWindow else null
+            if (Paster.paste(root?.let(::AccessibilityPasteNode), text)) {
+                onToast("Pasted into $appLabel · tap send")
+            } else {
+                service.getSystemService(ClipboardManager::class.java)
+                    .setPrimaryClip(ClipData.newPlainText("Relay reply", text))
+                onToast("Copied · long-press the message box to paste")
+            }
         }
     }
 

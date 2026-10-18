@@ -5,6 +5,7 @@ import 'dart:async';
 
 import 'data/history_repository.dart';
 import 'data/settings_store.dart';
+import 'detail/detail_app.dart';
 import 'native/overlay.dart';
 import 'native/overlay_events.dart';
 import 'native/permissions.dart';
@@ -39,6 +40,10 @@ Future<void> main() async {
   );
   unawaited(OverlaySync(settings, navigatorKey).start());
 }
+
+/// Phase 9: `DetailActivity`'s engine (detail / reply sheet over another app). Must live in main.dart.
+@pragma('vm:entry-point')
+void detailMain() => runApp(const DetailApp());
 
 /// Keeps the system bubble (Phase 7) and [SettingsStore] in step: pulls native state and the menu's
 /// route on start + resume, pushes every settings change.

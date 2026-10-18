@@ -17,11 +17,13 @@ and an empty `RelayAccessibilityService` so onboarding can enable it. Phase 7 ad
 | `PermissionsChannel` | overlay + accessibility status, settings intents, `filesDir/onboarded` until Phase 4 | 3 ✅ |
 | `RelayAccessibilityService` | on-demand tree read via [translateAllFromBubble] / [translateAtFromBubble]; invalidates overlays on window/scroll events | 8 ✅ |
 | `MessageExtractor`, `MessageTreeWalker`, `AppRules` | `[{id, text, bounds}]`, noise filter, per-app view ids — see [[Per-App Message Rules]] | 8 ✅ |
-| `TranslationLayer` | `TYPE_ACCESSIBILITY_OVERLAY` boxes + 2 dp progress line; `FLAG_NOT_TOUCHABLE` | 8 ✅ |
+| `TranslationLayer` | `TYPE_ACCESSIBILITY_OVERLAY` boxes + 2 dp progress line; Phase 9: one touchable window per box (tap → detail), progress line not touchable | 8 ✅ |
 | `OverlayEventsChannel` | `relay/overlay/events` → Dart history (`translated`); buffer when engine dead | 8 ✅ |
 | `NativeSettings` + `relay/settings` | target language + wifi-only for in-process `Translator` | 8 ✅ |
-| `DetailActivity` | translucent Flutter activity hosting the detail/reply sheet over other apps | 9 |
-| `Paster` | `ACTION_SET_TEXT` into the app's input; clipboard fallback; never sends | 9 |
+| `DetailActivity` (`relay/detail`) | transparent Flutter activity, own task + engine (`detailMain`); `args`, `paste`, `toast`, `close`; hides the bubble while resumed | 9 ✅ |
+| `paste/Paster` + `PasteNode` | find field, merge draft, `ACTION_SET_TEXT`; pure, JVM-tested (`PasterTest`); `AccessibilityPasteNode` adapts real nodes | 9 ✅ |
+| `paste/awaitForeground` | poll until the chat app is in front after the sheet closes (`AwaitForegroundTest`) | 9 ✅ |
+| `accessibility/OverlayInvalidation` | when boxes clear: scroll in the translated app or any window-state change; never content changes or Relay's own windows (`OverlayInvalidationTest`) | 9 ✅ |
 
 ## Bubble ↔ Flutter sync (Phase 7)
 - Dart `BubbleOverlay` (`lib/native/overlay.dart`) + `OverlaySync` in `main.dart`. Every `SettingsStore` change →
@@ -43,6 +45,15 @@ and an empty `RelayAccessibilityService` so onboarding can enable it. Phase 7 ad
 - Every overlay window is touchable (bubble, menu, hint, toast; tap dismisses hint/toast). Android 12+ blocks
   touches through *untrusted* `FLAG_NOT_TOUCHABLE` app overlays, so a pass-through toast would freeze the app below.
 - `RelayColors.kt` / `RelayFonts` mirror `tokens.dart`; fonts load from the bundled `flutter_assets/assets/fonts/`.
+
+## Bugs found on the first device run (2026-10-18, Phase 9)
+- `RelayAccessibilityService` built `HistoryEventBuffer(this)` as a field → NPE (no Context yet) → crash the
+  moment accessibility was enabled. Now `by lazy`.
+- Boxes vanished instantly ("Scrolled · hold again"): every `TYPE_WINDOW_CONTENT_CHANGED` cleared them. Now
+  [OverlayInvalidation] and the service no longer subscribes to content changes.
+- App names showed as package names: Android 11 package visibility. Manifest `<queries>` for launcher apps
+  (not `QUERY_ALL_PACKAGES`, which Play restricts).
+- Compose apps report bare view ids — see [[Per-App Message Rules]].
 
 ## Gotchas
 - [[Gotcha - No In-Place Text Replacement]]

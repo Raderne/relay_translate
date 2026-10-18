@@ -12,7 +12,7 @@ All from [[Design Source]]. Implementation phases in brackets.
 | Language sheet | French, Spanish, German, Portuguese (source auto-detected) | 4 ✅ |
 | History | grouped by day, dedupe, Clear, empty state → Open Chatter | 6 ✅ |
 | Chatter | in-app demo chat with the bubble; the sandbox | 5 ✅ |
-| Detail sheet | translation + original; Copy / Show original / Reply → translate back → Paste | 5, 9 |
+| Detail sheet | translation + original; Copy / Show original / Reply → translate back → Paste. Shared widget `lib/detail/detail_sheet.dart` (Chatter + over other apps) | 5 ✅, 9 ✅ |
 
 ## Main flows
 1. **First run** (Phase 3, in the app): Onboard 1 → Onboard 2 → real overlay settings → back to the app
@@ -26,6 +26,14 @@ All from [[Design Source]]. Implementation phases in brackets.
 2. **Translate screen**: hold bubble 550 ms → all messages translated → toast "N messages · English → French" [Show original]. Hold again = originals.
 3. **Translate one**: drag bubble onto a message → that message translated, flash outline, toast [Undo]. Dropping on an already-translated one opens the detail sheet.
 4. **Reply**: tap translated message → Reply → write in your language → "Translate to English" → "Paste into <App>" → text in the app's input, user taps send.
+4b. **Reply in another app** (Phase 9): hold bubble → translated boxes → tap a box → boxes clear, `DetailActivity`
+   (transparent, own engine `detailMain` → `DetailApp`) opens the sheet over the chat; bubble hidden →
+   Reply → type in the target language → "Translate to <source>" (`relay/translate`, target = message's
+   language) → "Paste into <App>" → sheet closes → accessibility service waits ≤ 2 s for the app to be in
+   front → `Paster` fills the focused (else first visible) editable field: replace if empty/hint, else append
+   after a space → toast "Pasted into <App> · tap send". **Never sends.** No field / `SET_TEXT` refused →
+   clipboard + "Copied · long-press the message box to paste". Copy → clipboard + "Copied" (sheet stays open).
+   Verified on the emulator with Google Messages (2026-10-18); WhatsApp still to check on a phone.
 5. **Bubble menu** (tap): Translate screen / Language (→ Home + sheet) / History / Hide bubble (→ Home, bubble off).
 
 Gesture details: [[Bubble Interaction Model]]. Cross-app mechanics: [[Android Overlay and Accessibility]].

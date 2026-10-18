@@ -36,6 +36,17 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <!-- Phase 9: detail / reply sheet over other apps. Own task + not in recents, so closing returns to the chat app. -->
+        <activity
+            android:name=".DetailActivity"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:excludeFromRecents="true"
+            android:taskAffinity="com.relay.relay_translate.detail"
+            android:theme="@style/DetailTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize" />
         <!-- On-demand screen text for bubble hold/drop (Phase 8). isAccessibilityTool is false. -->
         <service
             android:name=".RelayAccessibilityService"
@@ -80,6 +91,12 @@
 
          In particular, this is used by the Flutter engine in io.flutter.plugin.text.ProcessTextPlugin. -->
     <queries>
+        <!-- Phase 9: launcher apps' names ("Messages", not the package) for the detail sheet and
+             "Pasted into <App>". Avoids QUERY_ALL_PACKAGES, which Play restricts. -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
