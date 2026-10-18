@@ -7,7 +7,8 @@ import '../data/settings_store.dart';
 import 'bubble_tokens.dart';
 
 /// Pure gesture logic for the in-app bubble (Chatter, Phase 5).
-/// Port line-for-line to Kotlin `BubbleGesture.kt` in Phase 7.
+/// Ported line-for-line to Kotlin `android/.../bubble/BubbleGesture.kt` (system overlay, Phase 7).
+/// CLAUDE.md rule 3: change both in the same commit.
 enum BubblePhase { idle, pressing, dragging, menuOpen }
 
 class BubbleController extends ChangeNotifier {

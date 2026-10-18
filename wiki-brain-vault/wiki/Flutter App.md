@@ -36,5 +36,6 @@ app/lib/
 | `relay/overlay` | `start(settings)`, `stop`, `update`, `isRunning` | 7 |
 | `relay/overlay/events` | `translated`, `toast` (menu events Phase 7) | 8 ✅ partial |
 | `relay/settings` | `sync` → native prefs for accessibility `Translator` | 8 ✅ |
+| `relay/update` | `check`, `download(url)` (+ `progress` callback), `install(path)` → [[App Updates]] | 13 |
 
 Links: [[Architecture]], [[Screens and Flows]], [[Android Overlay and Accessibility]]

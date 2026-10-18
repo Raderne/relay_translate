@@ -43,3 +43,9 @@ Touched: none
 
 ## [2026-10-18 12:30] session | GitHub release workflow with split APKs
 Touched: Phases Roadmap
+
+## [2026-10-18 14:00] session | In-app updater from GitHub Releases
+Touched: App Updates, Flutter App, Privacy and Permissions, Deviations from Prototype, index
+
+## [2026-10-18 15:30] session | Phase 7 system overlay bubble
+Touched: Android Overlay and Accessibility, Bubble Interaction Model, Phases Roadmap

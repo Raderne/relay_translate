@@ -23,6 +23,7 @@ class AccessibilityTranslateCoordinator(
     private val onToast: (String) -> Unit,
 ) {
     private var showing = false
+    val isShowing: Boolean get() = showing
 
     fun translateAll() {
         scope.launch { readAndTranslate(dropX = null, dropY = null) }
@@ -50,18 +51,16 @@ class AccessibilityTranslateCoordinator(
         val extracted = extractor.extract(root)
         root?.recycle()
 
+        val isDrop = dropX != null && dropY != null
         if (extracted.isEmpty()) {
-            onToast("Couldn't find messages on this screen")
+            // A drop that hits nothing is just the user moving the bubble (prototype: silent).
+            if (!isDrop) onToast("Couldn't find messages on this screen")
             return
         }
 
         val targets = when {
             dropX != null && dropY != null -> {
-                val one = DropTargetSelector.select(extracted, dropX, dropY)
-                if (one == null) {
-                    onToast("Drop on a message")
-                    return
-                }
+                val one = DropTargetSelector.select(extracted, dropX, dropY) ?: return
                 listOf(one)
             }
             else -> extracted

@@ -5,6 +5,7 @@ import android.view.accessibility.AccessibilityEvent
 import android.util.Log
 import com.relay.relay_translate.accessibility.AccessibilityTranslateCoordinator
 import com.relay.relay_translate.accessibility.MessageExtractor
+import com.relay.relay_translate.bubble.BubbleService
 import com.relay.relay_translate.history.HistoryEventBuffer
 import com.relay.relay_translate.ui.TranslationLayer
 import kotlinx.coroutines.CoroutineScope
@@ -40,7 +41,9 @@ class RelayAccessibilityService : AccessibilityService() {
                 OverlayEventsChannel.instance?.emitTranslated(item)
                     ?: historyBuffer.enqueue(item)
             },
-            onToast = { msg -> OverlayEventsChannel.instance?.emitToast(msg) },
+            onToast = { msg ->
+                if (!BubbleService.toast(msg)) OverlayEventsChannel.instance?.emitToast(msg)
+            },
         )
         OverlayEventsChannel.instance?.attachBuffer(historyBuffer)
         OverlayEventsChannel.instance?.flushBuffered()
@@ -76,6 +79,13 @@ class RelayAccessibilityService : AccessibilityService() {
         fun translateAllFromBubble() {
             instance?.coordinator?.translateAll()
                 ?: Log.w(TAG, "Accessibility service not running")
+        }
+
+        /** Translated boxes are on screen: bubble hold / menu reverts instead of translating. */
+        val isShowing: Boolean get() = instance?.coordinator?.isShowing == true
+
+        fun clearFromBubble() {
+            instance?.coordinator?.clearOverlays()
         }
 
         /** Called from the overlay bubble on drag-drop. */

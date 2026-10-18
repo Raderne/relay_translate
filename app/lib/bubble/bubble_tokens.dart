@@ -1,4 +1,4 @@
-/// Timings and sizes shared with Kotlin `BubbleGesture.kt` (Phase 7).
+/// Timings and sizes shared with Kotlin `BubbleTokens` in `BubbleGesture.kt` (Phase 7).
 /// See wiki [[Bubble Interaction Model]].
 abstract final class BubbleTokens {
   static const holdMs = 550;

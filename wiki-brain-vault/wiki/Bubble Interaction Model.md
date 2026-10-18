@@ -3,7 +3,7 @@
 The single most important piece of behaviour. Implemented **twice** with identical numbers:
 - Dart `app/lib/bubble/bubble_controller.dart` + `bubble_tokens.dart` (Chatter demo, Phase 5) — pure logic;
   covered by `test/bubble/bubble_controller_test.dart`.
-- Kotlin `BubbleGesture.kt` (system overlay, Phase 7) — line-for-line port.
+- Kotlin `bubble/BubbleGesture.kt` (system overlay, Phase 7) — line-for-line port; covered by `BubbleGestureTest`.
 Each file must reference the other at the top; change both together.
 
 ## State machine
@@ -34,5 +34,15 @@ pressing ──up (<550 ms, <6 dp)──▶ toggle menu
 - Hold when everything is translated = revert (toast "Showing original text").
 - Bubble hidden while the detail sheet is open.
 - Size change clamps x so the bubble stays on screen.
+
+## System overlay deviations (Phase 7)
+- **No drop-target highlight over other apps** (no 1.18 scale / accent-700 fill while dragging): knowing the
+  messages under the bubble would mean reading the screen during the drag, which [[Privacy and Permissions]] forbids.
+  The drop point is sent to accessibility on release instead.
+- **A drop that hits no message is silent** (as in Chatter), so moving the bubble never toasts. Phase 8's
+  "Drop on a message" / "Couldn't find messages" toasts now fire only for hold.
+- **Smaller shadow** than `RelayShadows.lg`: the overlay window is the bubble + 10 dp, so a 32 dp blur would
+  either clip or make a dead zone that swallows taps meant for the app below.
+- Overlay toast has no action button; menu has no hover/press fill.
 
 Links: [[Screens and Flows]], [[Android Overlay and Accessibility]], [[Flutter App]]

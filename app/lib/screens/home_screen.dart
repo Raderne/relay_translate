@@ -8,10 +8,12 @@ import '../data/settings_store.dart';
 import '../native/permissions.dart';
 import '../native/settings_bridge.dart';
 import '../native/translator.dart';
+import '../native/updater.dart';
 import '../routes.dart';
 import '../theme/theme.dart';
 import 'gallery.dart';
 import 'language_sheet.dart';
+import 'update_sheet.dart';
 
 class HomeRouteArgs {
   const HomeRouteArgs({this.openLanguageSheet = false});
@@ -19,11 +21,12 @@ class HomeRouteArgs {
 }
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key, this.translator = const Translator()});
+  const HomeScreen({super.key, this.translator = const Translator(), this.updater = const Updater()});
 
   static const route = AppRoutes.home;
 
   final Translator translator;
+  final Updater updater;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -43,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       if (!mounted) return;
       unawaited(_refreshModelStatus());
       unawaited(_loadHistoryCount());
+      unawaited(_checkForUpdate());
     });
   }
 
@@ -71,6 +75,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       unawaited(RelayScope.of(context).refresh());
       unawaited(_refreshModelStatus());
       unawaited(_loadHistoryCount());
+    }
+  }
+
+  Future<void> _checkForUpdate() async {
+    final info = await widget.updater.check();
+    if (info != null && info.available && mounted) {
+      await showUpdateSheet(context, info, updater: widget.updater);
     }
   }
 

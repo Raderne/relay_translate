@@ -2,15 +2,18 @@
 
 Native Kotlin half of the app, in `app/android/app/src/main/kotlin/com/relay/relay_translate/`.
 `Translator` + `TranslateChannel` landed in Phase 1. Phase 3 added `PermissionsChannel` (`relay/permissions`)
-and an empty `RelayAccessibilityService` so onboarding can enable it. The bubble is still Phases 7–9.
+and an empty `RelayAccessibilityService` so onboarding can enable it. Phase 7 added the system bubble
+(`bubble/` package); Phase 9 adds reply + paste.
 
 ## Pieces
 | Class | Job | Phase |
 |---|---|---|
 | `Translator` + `TranslateChannel` | ML Kit translate + language-id, model downloads, `relay/translate` channel; shared by the service and Flutter ([[Translation Pipeline]]) | 1 ✅ |
-| `BubbleService` | foreground service (`specialUse` type on Android 14+), owns overlay windows, notification with Hide | 7 |
-| `BubbleView` / `BubbleGesture` | the bubble + ring; gesture port of [[Bubble Interaction Model]] | 7 |
-| `MenuView`, `ToastView`, `HintView` | small overlay windows added on demand | 7 |
+| `bubble/BubbleService` | foreground service (`specialUse` on Android 14+), notification "Relay bubble is on" + Hide; owns the bubble/menu/hint/toast windows; hides while a Relay activity is resumed or the screen is off/locked | 7 ✅ code |
+| `bubble/BubbleGesture` (+ `BubbleTokens`) | line-for-line port of `bubble_controller.dart`, pure Kotlin, JVM-tested (`BubbleGestureTest`) — [[Bubble Interaction Model]] | 7 ✅ |
+| `bubble/BubbleViews.kt` | `BubbleView` (circle + ring), `BlueprintFrame`, `menuView`, `hintView`, `toastView` | 7 ✅ code |
+| `bubble/BubblePrefs` | the service's own settings copy (`relay_bubble` SharedPreferences) | 7 ✅ |
+| `OverlayChannel` (`relay/overlay`) | `apply` (start/update/stop), `state` (pull), `takeRoute` (menu Language/History) | 7 ✅ |
 | `PermissionsChannel` | overlay + accessibility status, settings intents, `filesDir/onboarded` until Phase 4 | 3 ✅ |
 | `RelayAccessibilityService` | on-demand tree read via [translateAllFromBubble] / [translateAtFromBubble]; invalidates overlays on window/scroll events | 8 ✅ |
 | `MessageExtractor`, `MessageTreeWalker`, `AppRules` | `[{id, text, bounds}]`, noise filter, per-app view ids — see [[Per-App Message Rules]] | 8 ✅ |
@@ -20,11 +23,26 @@ and an empty `RelayAccessibilityService` so onboarding can enable it. The bubble
 | `DetailActivity` | translucent Flutter activity hosting the detail/reply sheet over other apps | 9 |
 | `Paster` | `ACTION_SET_TEXT` into the app's input; clipboard fallback; never sends | 9 |
 
+## Bubble ↔ Flutter sync (Phase 7)
+- Dart `BubbleOverlay` (`lib/native/overlay.dart`) + `OverlaySync` in `main.dart`. Every `SettingsStore` change →
+  `apply` (no-op before onboarding). On start and every resume Dart first **pulls** `state` (position, hint seen,
+  "Hide" from menu/notification) into the store, then applies, then `takeRoute`.
+- Pull instead of the planned `positionChanged` / `menu:*` events: it works whether the engine was alive or dead,
+  so there is one path, not two.
+- Menu Language / History start `MainActivity` with extra `relay_route`; Dart opens Home + language sheet or History.
+- Hold / menu "Translate screen" → `RelayAccessibilityService.translateAllFromBubble`; when boxes are showing it
+  reverts ("Showing original text"). Accessibility off → toast "Screen text access is off".
+- Accessibility toasts go to the bubble's native toast when the service runs (Flutter can't show them over other apps).
+- Android 13+: `apply` asks for `POST_NOTIFICATIONS` the first time it starts the service (needed for the Hide action).
+
 ## Rules
 - Overlay window = bubble's own rect + `FLAG_NOT_FOCUSABLE`, so touches elsewhere reach the app.
 - The service calls `Translator` in-process, so translation works when the Flutter engine is dead. (A cloud path to the [[Backend API]] is added only if Phase 12 is built.)
 - Service keeps its own settings copy (SharedPreferences) for restart after process death — the only native storage.
 - Hide bubble while Relay itself is foreground (in-app Chatter bubble takes over).
+- Every overlay window is touchable (bubble, menu, hint, toast; tap dismisses hint/toast). Android 12+ blocks
+  touches through *untrusted* `FLAG_NOT_TOUCHABLE` app overlays, so a pass-through toast would freeze the app below.
+- `RelayColors.kt` / `RelayFonts` mirror `tokens.dart`; fonts load from the bundled `flutter_assets/assets/fonts/`.
 
 ## Gotchas
 - [[Gotcha - No In-Place Text Replacement]]

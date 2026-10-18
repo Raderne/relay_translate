@@ -7,7 +7,8 @@
 | Accessibility service | read on-screen message text; paste replies | Onboard 2 → disclosure dialog → `ACTION_ACCESSIBILITY_SETTINGS` |
 | `FOREGROUND_SERVICE` + `FOREGROUND_SERVICE_SPECIAL_USE` | keep the bubble alive | manifest |
 | `POST_NOTIFICATIONS` (Android 13+) | foreground-service notification | runtime prompt when the bubble is first turned on |
-| `INTERNET` | ML Kit model downloads (and cloud translation only if Phase 12) | manifest |
+| `INTERNET` | ML Kit model downloads, [[App Updates]] check/download (and cloud translation only if Phase 12) | manifest |
+| `REQUEST_INSTALL_PACKAGES` | install a downloaded update ([[App Updates]]) | system "Install unknown apps" screen on first update |
 
 ## Promises (shown to users; keep the code honest to these)
 - "Relay reads on-screen text only when you hold or drop the bubble." → no continuous tree reads.

@@ -18,6 +18,7 @@ Maintained by Claude. Entry point for the vault.
 - [[Privacy and Permissions]] — permissions, user-facing promises, disclosure text
 - [[Design System - Industry]] — blueprint visual language and Flutter port rules
 - [[Deviations from Prototype]] — intentional UI/copy differences from the Claude Design file
+- [[App Updates]] — self-update from GitHub Releases: check → per-ABI APK → system installer
 - [[Phases Roadmap]] — phase list + status, points to `phases/`
 
 ## Sources

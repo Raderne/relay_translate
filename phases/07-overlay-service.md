@@ -50,4 +50,4 @@ Same 4 items. "Language" and "History" launch `MainActivity` with an intent extr
 - [ ] Bubble drags smoothly over the launcher, WhatsApp, Chrome; taps elsewhere reach the app below.
 - [ ] Hold shows the ring and fires a (stub) translateAll event; drag/snap/clamp identical to demo.
 - [ ] Killing the Flutter UI keeps the bubble alive; toggling off from notification works.
-- [ ] Wiki `Android Overlay and Accessibility` written with the real class names.
+- [x] Wiki `Android Overlay and Accessibility` written with the real class names.
