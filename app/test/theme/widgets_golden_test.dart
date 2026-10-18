@@ -1,3 +1,8 @@
+// Goldens were generated on Windows; Linux CI renders text antialiasing ~0.04 % differently.
+// Run locally (`flutter test`); CI skips them with `--exclude-tags golden`.
+@Tags(['golden'])
+library;
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';

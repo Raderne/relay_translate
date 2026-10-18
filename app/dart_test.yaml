@@ -1,0 +1,3 @@
+# Test tags. `golden`: pixel snapshots made on Windows — CI (Linux) excludes them.
+tags:
+  golden:

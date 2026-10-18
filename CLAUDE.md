@@ -28,7 +28,7 @@ wiki-brain-vault/   knowledge base (see below)
 | What | Command |
 |---|---|
 | Run app | `cd app && flutter run --flavor beta` |
-| App checks | `cd app && flutter analyze && flutter test` |
+| App checks | `cd app && flutter analyze && flutter test` (goldens are Windows snapshots; CI runs `--exclude-tags golden`) |
 | Single Dart test | `cd app && flutter test test/bubble/<file>_test.dart` (add `--name "<test name>"` to narrow) |
 | Kotlin unit tests | `cd app/android && ./gradlew :app:testBetaDebugUnitTest` (one class: `--tests "*DropTargetSelectorTest"`) |
 | Release | bump `version:` in `app/pubspec.yaml`, add a `## [x.y.z]` section to `CHANGELOG.md`, push tag `vx.y.z` on `develop` → `.github/workflows/release.yml` builds signed per-ABI `beta` APKs and publishes a GitHub Release |

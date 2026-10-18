@@ -95,8 +95,9 @@ jobs:
       - name: Analyze
         run: flutter analyze
 
+      # Goldens are Windows snapshots; Linux antialiasing differs by ~0.04 % (app/dart_test.yaml).
       - name: Test
-        run: flutter test
+        run: flutter test --exclude-tags golden
 
       - name: Write Android signing configuration
         env:
