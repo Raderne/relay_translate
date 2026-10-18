@@ -22,13 +22,20 @@ object AppRules {
      * When rules exist for [packageName], only nodes with matching [viewIdResourceName] are kept.
      * When no rules exist, returns true (generic heuristic applies elsewhere).
      */
-    fun accepts(packageName: String, viewIdResourceName: String?): Boolean {
+    fun accepts(packageName: String, viewIdResourceName: String?, contentDescription: String? = null): Boolean {
         val rules = allowByPackage[packageName] ?: return true
         if (viewIdResourceName.isNullOrBlank()) return false
+        if (packageName in needsDescription && contentDescription.isNullOrBlank()) return false
         // Compose apps (Google Messages) report the bare id ("message_text") without "pkg:id/".
         val id = viewIdResourceName.substringAfter(":id/")
         return rules.any { it.substringAfter(":id/") == id }
     }
+
+    /**
+     * Compose apps that reuse the message id for info lines ("Texting with … (SMS/MMS)", "4:03 PM").
+     * Real bubbles there always carry a (localized) description like "555-1234 said …".
+     */
+    private val needsDescription = setOf("com.google.android.apps.messaging")
 
     fun hasRules(packageName: String): Boolean = allowByPackage.containsKey(packageName)
 }

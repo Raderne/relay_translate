@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../data/languages.dart';
@@ -11,7 +10,8 @@ import '../native/translator.dart';
 import '../native/updater.dart';
 import '../routes.dart';
 import '../theme/theme.dart';
-import 'gallery.dart';
+import '../native/beta.dart';
+import 'beta_survey_row.dart';
 import 'language_sheet.dart';
 import 'update_sheet.dart';
 
@@ -47,6 +47,13 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       unawaited(_refreshModelStatus());
       unawaited(_loadHistoryCount());
       unawaited(_checkForUpdate());
+      unawaited(_maybeExplainNotifications());
+      // Phase 11: Arabic + French ready before the first translation.
+      unawaited(
+        widget.translator
+            .prefetchFeatured(wifiOnly: SettingsScope.of(context).wifiOnlyDownloads)
+            .whenComplete(() => mounted ? _refreshModelStatus() : null),
+      );
     });
   }
 
@@ -76,6 +83,44 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
       unawaited(_refreshModelStatus());
       unawaited(_loadHistoryCount());
     }
+  }
+
+  /// 1.0.0: explain before Android's notification prompt, once. Needed for "Relay bubble is on" + Hide.
+  Future<void> _maybeExplainNotifications() async {
+    final settings = SettingsScope.of(context);
+    final permissions = RelayScope.of(context).permissions;
+    if (!settings.onboarded || settings.notificationsAsked) return;
+    if (!await permissions.notificationsNeeded() || !mounted) return;
+    final ok = await RelaySheet.show<bool>(
+      context,
+      builder: (context) => Padding(
+        padding: const EdgeInsets.fromLTRB(20, 18, 20, 36),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text('Turn on notifications', style: RelayType.h4),
+            const SizedBox(height: 8),
+            const Text(
+              'While the bubble is on, Relay shows "Relay bubble is on" with a Hide button, '
+              'so you can turn it off from anywhere. Nothing else.',
+              style: RelayType.bodyMuted,
+            ),
+            const SizedBox(height: 16),
+            RelayButton.primary(label: 'Continue', expand: true, onPressed: () => Navigator.pop(context, true)),
+            const SizedBox(height: 8),
+            RelayButton.ghost(
+              label: 'Not now',
+              expand: true,
+              height: 40,
+              onPressed: () => Navigator.pop(context, false),
+            ),
+          ],
+        ),
+      ),
+    );
+    await settings.setNotificationsAsked(true);
+    if (ok == true) await permissions.requestNotifications();
   }
 
   Future<void> _checkForUpdate() async {
@@ -211,15 +256,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
                             if (mounted) await _loadHistoryCount();
                           },
                         ),
-                        if (kDebugMode) ...[
-                          const SizedBox(height: 24),
-                          RelayButton.ghost(
-                            label: 'Gallery',
-                            expand: true,
-                            height: 40,
-                            onPressed: () => Navigator.of(context).pushNamed(GalleryScreen.route),
-                          ),
-                        ],
+                        if (isBetaBuild) const BetaSurveyRow(),
                       ],
                     ),
                   ),

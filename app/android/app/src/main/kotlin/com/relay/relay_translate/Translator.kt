@@ -31,7 +31,8 @@ import com.google.mlkit.nl.translate.Translator as MlTranslator
  */
 class Translator(context: Context) : Closeable {
 
-    data class Result(val text: String, val source: String)
+    /** [downloaded]: this call had to fetch a model first, so its duration isn't latency (Phase 10). */
+    data class Result(val text: String, val source: String, val downloaded: Boolean = false)
 
     /** Typed failure; [code] is what the UI maps to a toast. */
     class TranslateException(val code: String, message: String, cause: Throwable? = null) :
@@ -75,25 +76,25 @@ class Translator(context: Context) : Closeable {
         val needed = sources.filter { it != LanguageDetection.UND && it != targetCode }.toSet()
         // Language-id can return tags ML Kit Translate can't handle (e.g. "zh-Latn"): fail loudly.
         val sourceCodes = needed.associateWith { translateCode(it) }
-        (sourceCodes.values + targetCode).toSet().forEach { ensureModel(it, wifiOnly) }
+        val downloaded = (sourceCodes.values + targetCode).toSet().map { ensureModel(it, wifiOnly) }.any { it }
 
         return coroutineScope {
             texts.zip(sources) { text, source ->
                 async {
                     when {
-                        source == LanguageDetection.UND || source == targetCode -> Result(text, source)
-                        else -> Result(client(sourceCodes.getValue(source), targetCode).translateText(text), source)
+                        source == LanguageDetection.UND || source == targetCode -> Result(text, source, downloaded)
+                        else -> Result(client(sourceCodes.getValue(source), targetCode).translateText(text), source, downloaded)
                     }
                 }
             }.awaitAll()
         }
     }
 
-    /** Downloads the model for [lang] if missing. No-op when it is already on the device. */
-    suspend fun ensureModel(lang: String, wifiOnly: Boolean = true) {
+    /** Downloads the model for [lang] if missing. Returns true when it had to download. */
+    suspend fun ensureModel(lang: String, wifiOnly: Boolean = true): Boolean {
         val code = translateCode(lang)
         val model = TranslateRemoteModel.Builder(code).build()
-        if (models.isModelDownloaded(model).await()) return
+        if (models.isModelDownloaded(model).await()) return false
         // ML Kit queues downloads in DownloadManager and waits for connectivity *forever* (verified on
         // the emulator in airplane mode), so fail fast ourselves instead of showing an endless spinner.
         requireNetwork(wifiOnly)
@@ -108,6 +109,7 @@ class Translator(context: Context) : Closeable {
         } finally {
             downloading -= code
         }
+        return true
     }
 
     suspend fun modelStatus(lang: String): String {

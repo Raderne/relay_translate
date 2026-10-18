@@ -13,7 +13,7 @@ void main() {
     final db = await openRelayDatabase(path: ':memory:');
     final store = await SettingsStore.open(database: db);
 
-    expect(store.targetLang, 'fr');
+    expect(store.targetLang, 'ar'); // Phase 11: Arabic is the default for new installs
     expect(store.bubbleOn, isTrue);
     expect(store.snap, isTrue);
     expect(store.size, 'M');

@@ -4,7 +4,7 @@ package com.relay.relay_translate.extract
  * Drops timestamps, emoji-only crumbs, and other non-message noise from extracted text.
  */
 object MessageNoiseFilter {
-    private val timestamp = Regex("^\\d{1,2}:\\d{2}$")
+    private val timestamp = Regex("^\\d{1,2}:\\d{2}(\\s?[AaPp]\\.?[Mm]\\.?)?$") // 24 h and 12 h ("4:03 PM")
 
     fun isNoise(text: String): Boolean {
         val t = text.trim()

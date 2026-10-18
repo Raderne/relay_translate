@@ -10,7 +10,7 @@ Phase 12 server SQLite is still conditional (`phases/12-azure-fallback.md`).
 | Table | Columns | Notes |
 |---|---|---|
 | `settings` | `key` PK, `value` | `target_lang`, `bubble_on`, `snap`, `size`, `bubble_x/y`, `onboarded`, `hint_seen`, `wifi_only_downloads` (+ `engine`, `device_token` if Phase 12) |
-| `history` | `id`, `dedupe_key` UNIQUE, `src`, `tr`, `src_lang`, `target_lang`, `app_package`, `app_label`, `engine`, `ms`, `flagged`, `note`, `created_at` | upsert moves duplicates to the top; cap 1 000 rows. `engine/ms/flagged/note` feed the Phase 10 evaluation |
+| `history` | `id`, `dedupe_key` UNIQUE, `src`, `tr`, `src_lang`, `target_lang`, `app_package`, `app_label`, `engine`, `ms`, `flagged`, `note`, `created_at` | upsert moves duplicates to the top; cap 1 000 rows. `engine/ms/flagged/note` feed the Phase 10 evaluation; re-logging keeps `flagged/note`, `ms` null when a model download was part of the call ([[Beta Feedback and Metrics]]) |
 
 ML Kit models are managed by ML Kit itself (not in this DB).
 

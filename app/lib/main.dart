@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'dart:async';
@@ -10,7 +9,6 @@ import 'native/overlay.dart';
 import 'native/overlay_events.dart';
 import 'native/permissions.dart';
 import 'native/settings_bridge.dart';
-import 'screens/gallery.dart';
 import 'screens/home_screen.dart';
 import 'routes.dart';
 import 'screens/onboarding.dart';
@@ -43,7 +41,7 @@ Future<void> main() async {
 
 /// Phase 9: `DetailActivity`'s engine (detail / reply sheet over another app). Must live in main.dart.
 @pragma('vm:entry-point')
-void detailMain() => runApp(const DetailApp());
+void detailMain() => runApp(DetailApp());
 
 /// Keeps the system bubble (Phase 7) and [SettingsStore] in step: pulls native state and the menu's
 /// route on start + resume, pushes every settings change.
@@ -125,9 +123,8 @@ class RelayApp extends StatelessWidget {
             Onboard1Screen.route: (_) => const Onboard1Screen(),
             Onboard2Screen.route: (_) => const Onboard2Screen(),
             HomeScreen.route: (_) => const HomeScreen(),
-            AppRoutes.history: (_) => const HistoryScreen(),
+            AppRoutes.history: (_) => HistoryScreen(),
             AppRoutes.chatter: (_) => const ChatterScreen(),
-            if (kDebugMode) GalleryScreen.route: (_) => const GalleryScreen(),
           },
         ),
       ),

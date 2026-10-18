@@ -16,7 +16,7 @@ object NativeSettings {
 
     fun targetLang(context: Context): String =
         context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getString("target_lang", "fr") ?: "fr"
+            .getString("target_lang", "ar") ?: "ar" // same default as SettingsStore (Phase 11)
 
     fun wifiOnly(context: Context): Boolean =
         context.applicationContext.getSharedPreferences(PREFS, Context.MODE_PRIVATE)

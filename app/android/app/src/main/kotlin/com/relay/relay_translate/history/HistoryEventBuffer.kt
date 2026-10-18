@@ -34,7 +34,8 @@ class HistoryEventBuffer(context: Context) {
         val tr: String,
         val srcLang: String,
         val targetLang: String,
-        val ms: Long,
+        /** Null when the call downloaded a model (Phase 10). */
+        val ms: Long?,
     ) {
         fun toJson(): JSONObject = JSONObject()
             .put("app_package", appPackage)
@@ -43,7 +44,7 @@ class HistoryEventBuffer(context: Context) {
             .put("tr", tr)
             .put("src_lang", srcLang)
             .put("target_lang", targetLang)
-            .put("ms", ms)
+            .put("ms", ms ?: JSONObject.NULL)
 
         fun toEventMap(): Map<String, Any?> = mapOf(
             "app_package" to appPackage,
@@ -63,7 +64,7 @@ class HistoryEventBuffer(context: Context) {
                 tr = o.getString("tr"),
                 srcLang = o.getString("src_lang"),
                 targetLang = o.getString("target_lang"),
-                ms = o.getLong("ms"),
+                ms = if (o.isNull("ms")) null else o.getLong("ms"),
             )
         }
     }

@@ -14,6 +14,7 @@ import '../data/history_repository.dart';
 import '../data/languages.dart';
 import '../data/settings_store.dart';
 import '../detail/detail_sheet.dart';
+import '../native/beta.dart';
 import '../routes.dart';
 import '../theme/theme.dart';
 import 'home_screen.dart';
@@ -359,21 +360,11 @@ class _MessageBubble extends StatelessWidget {
                           padding: const EdgeInsets.only(bottom: 3),
                           child: Text('Sent via Relay · ${message.sentViaPair}', style: RelayType.messageTag),
                         ),
-                      if (message.isTranslated && message.sourceLang != null)
-                        Padding(
-                          padding: const EdgeInsets.only(bottom: 3),
-                          child: Row(
-                            children: [
-                              const RelayIcon(RelayIcons.languages, size: 11, color: RelayColors.accent700),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Translated · ${message.sourceLang!.toUpperCase()} → ${targetLang.toUpperCase()}',
-                                style: RelayType.messageTag,
-                              ),
-                            ],
-                          ),
-                        ),
-                      Text(message.shown, style: RelayType.message),
+                      Text(
+                        message.shown,
+                        style: RelayType.message,
+                        textDirection: textDirectionFor(message.isTranslated ? targetLang : null),
+                      ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: Text(message.time, style: RelayType.messageMeta),
@@ -667,6 +658,8 @@ class _DetailSheet extends StatelessWidget {
       kicker: '$pair · $kChatterLabel',
       translation: m.display ?? m.src,
       original: m.src,
+      translationLang: m.display == null ? srcLang : settings.targetLang,
+      originalLang: srcLang,
       replyMode: session.detailReplyMode,
       replyFieldLabel: 'Your reply in ${langName(settings.targetLang)}',
       replyTranslated: session.replyTranslated,
@@ -688,6 +681,9 @@ class _DetailSheet extends StatelessWidget {
       onReplyChanged: session.setReplyDraft,
       onTranslateReply: () => unawaited(session.translateReply()),
       onPaste: () => session.pasteReply(session.replyTranslated!),
+      flagged: session.detailFlagged,
+      onFlag: isBetaBuild ? (v) => unawaited(session.setDetailFlag(v)) : null,
+      onNoteChanged: (n) => unawaited(session.setDetailNote(n)),
     );
   }
 }

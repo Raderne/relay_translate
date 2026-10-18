@@ -1,7 +1,10 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:relay_translate/data/db.dart';
+import 'package:relay_translate/data/history_repository.dart';
 import 'package:relay_translate/detail/cross_app_detail.dart';
 import 'package:relay_translate/native/translator.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -133,5 +136,44 @@ void main() {
     await s.showOriginal();
     await s.close();
     expect(detailCalls.map((c) => c.method), ['close', 'close']);
+  });
+
+  group('beta flag (Phase 10)', () {
+    setUpAll(() {
+      sqfliteFfiInit();
+      databaseFactory = databaseFactoryFfi;
+    });
+
+    Future<HistoryRepository> repo() async {
+      final h = HistoryRepository(await openRelayDatabase(path: ':memory:'));
+      await h.clear();
+      return h;
+    }
+
+    test('flag writes a flagged row for the other app, note follows', () async {
+      final history = await repo();
+      final s = CrossAppDetailSession(args: args, history: history);
+
+      await s.setFlag(true);
+      await s.setNote('wrong tone');
+
+      expect(s.flagged, isTrue);
+      final row = (await history.fetchAll()).single;
+      expect(row.src, 'Are you free tonight?');
+      expect(row.tr, 'Tu es libre ce soir ?');
+      expect(row.appLabel, 'WhatsApp');
+      expect(row.appPackage, 'com.whatsapp');
+      expect(row.flagged, isTrue);
+      expect(row.note, 'wrong tone');
+    });
+
+    test('unflag clears the row flag', () async {
+      final history = await repo();
+      final s = CrossAppDetailSession(args: args, history: history);
+      await s.setFlag(true);
+      await s.setFlag(false);
+      expect(s.flagged, isFalse);
+      expect((await history.fetchAll()).single.flagged, isFalse);
+    });
   });
 }

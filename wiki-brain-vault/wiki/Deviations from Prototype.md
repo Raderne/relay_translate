@@ -24,6 +24,14 @@ See [[App Updates]].
 No drop-target highlight while dragging over other apps, silent drops on nothing, smaller shadow, toast
 without action. Details and reasons: [[Bubble Interaction Model]] → "System overlay deviations".
 
+## No "Translated · EN → AR" line (2026-10-18, user decision)
+Removed from translated boxes over other apps and from Chatter bubbles: redundant. The accent outline marks a
+translated message; the pair is in the detail sheet kicker. Toasts keep it.
+
+## Permission hints (1.0.0)
+Not in the prototype: Onboard 2's overlay-list hint and restricted-settings help, and Home's "Turn on
+notifications" sheet. See [[Privacy and Permissions]].
+
 ## Detail sheet over other apps (Phase 9)
 
 | Prototype | App |
@@ -31,3 +39,10 @@ without action. Details and reasons: [[Bubble Interaction Model]] → "System ov
 | Tapping a message keeps the other translations on screen | Tapping a translated box **clears all boxes**, then opens the sheet. Accessibility overlays draw above every activity, so they would cover the sheet. Hold again to re-translate. |
 | Show original reverts that message | Closes the sheet (the boxes are already gone). |
 | Toasts inside the chat | Native overlay toast (bubble running) or Android system toast. |
+
+## Launch screen
+
+The prototype's Launch screen shows the mark, "Relay", "Translate inside any app" and a 1.7 s loading line
+("Starting" → "Loading languages"), then goes to Onboard 1 / Home after 1.9 s. The app uses the native
+Android launch window, which can only show the mark on accent-900 — no wordmark, tagline or loading line,
+and no forced 1.9 s wait. See [[Design System - Industry]] → "App icon and launch screen".

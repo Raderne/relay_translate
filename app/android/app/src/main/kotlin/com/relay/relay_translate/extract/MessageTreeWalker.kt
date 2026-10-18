@@ -26,7 +26,7 @@ object MessageTreeWalker {
         val text = node.displayText()
         if (isLeaf && node.visibleToUser && text != null) {
             if (!MessageNoiseFilter.isNoise(text)) {
-                if (AppRules.accepts(packageName, node.viewId)) {
+                if (AppRules.accepts(packageName, node.viewId, node.contentDescription)) {
                     if (!skipToolbarHeuristic || !looksLikeToolbar(node)) {
                         val bounds = node.bounds
                         out += ScreenMessage(

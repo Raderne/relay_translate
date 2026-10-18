@@ -7,6 +7,7 @@ import '../data/chatter_seed.dart';
 import '../data/history_repository.dart';
 import '../data/languages.dart';
 import '../data/settings_store.dart';
+import '../native/beta.dart';
 import '../native/translator.dart';
 import 'chatter_models.dart';
 
@@ -15,7 +16,9 @@ class ChatterSession extends ChangeNotifier {
     required this.settings,
     required this.history,
     this.translator = const Translator(),
-  }) : messages = kChatterSeed
+    bool? beta,
+  }) : beta = beta ?? isBetaBuild,
+       messages = kChatterSeed
       .map(
         (s) => ChatMessage(id: s.id, time: s.time, src: s.src, outgoing: s.outgoing),
       )
@@ -24,6 +27,9 @@ class ChatterSession extends ChangeNotifier {
   final SettingsStore settings;
   final HistoryRepository history;
   final Translator translator;
+
+  /// Phase 10: the beta also logs undetected messages so the detection-failure rate is measurable.
+  final bool beta;
 
   final List<ChatMessage> messages;
   String composerDraft = '';
@@ -102,6 +108,41 @@ class ChatterSession extends ChangeNotifier {
 
   void markCopied() => _toast('Copied');
 
+  /// Beta 👎 (Phase 10): message id → note.
+  final _flags = <String, String?>{};
+
+  bool get detailFlagged => _flags.containsKey(detailMessageId);
+
+  Future<void> setDetailFlag(bool flagged) async {
+    final m = messageById(detailMessageId);
+    if (m == null) return;
+    if (flagged) {
+      _flags[m.id] = null;
+    } else {
+      _flags.remove(m.id);
+    }
+    notifyListeners();
+    await _saveFlag(m, flagged: flagged);
+  }
+
+  Future<void> setDetailNote(String note) async {
+    final m = messageById(detailMessageId);
+    if (m == null || !_flags.containsKey(m.id)) return;
+    _flags[m.id] = note;
+    await _saveFlag(m, flagged: true, note: note);
+  }
+
+  Future<void> _saveFlag(ChatMessage m, {required bool flagged, String? note}) => history.setFlag(
+    src: m.src,
+    tr: m.display ?? m.src,
+    srcLang: m.sourceLang ?? 'und',
+    targetLang: settings.targetLang,
+    appPackage: kChatterPackage,
+    appLabel: kChatterLabel,
+    flagged: flagged,
+    note: note,
+  );
+
   void revertMessage(String id) {
     final m = messageById(id);
     if (m == null || !m.incoming) return;
@@ -137,6 +178,7 @@ class ChatterSession extends ChangeNotifier {
       final texts = incoming.map((m) => m.src).toList();
       final results = await translator.translate(texts, target, wifiOnly: settings.wifiOnlyDownloads);
       final elapsed = DateTime.now().difference(started);
+      final ms = results.any((r) => r.downloaded) ? null : elapsed.inMilliseconds;
       if (elapsed < const Duration(milliseconds: BubbleTokens.translateAllMinMs)) {
         await Future<void>.delayed(
           const Duration(milliseconds: BubbleTokens.translateAllMinMs) - elapsed,
@@ -148,6 +190,7 @@ class ChatterSession extends ChangeNotifier {
         final m = incoming[i];
         if (r.undetected) {
           anyUnd = true;
+          if (beta) await history.logTranslation(src: m.src, tr: m.src, srcLang: 'und', targetLang: target, ms: ms);
           continue;
         }
         m.display = r.text;
@@ -157,7 +200,7 @@ class ChatterSession extends ChangeNotifier {
           tr: r.text,
           srcLang: r.source,
           targetLang: target,
-          ms: elapsed.inMilliseconds,
+          ms: ms,
         );
       }
       final detected = results.where((r) => !r.undetected).map((r) => r.source).toSet();
@@ -195,7 +238,10 @@ class ChatterSession extends ChangeNotifier {
       final target = settings.targetLang;
       final results = await translator.translate([m.src], target, wifiOnly: settings.wifiOnlyDownloads);
       final r = results.single;
+      // Measured before the flash animation: latency, not UI time.
+      final ms = r.downloaded ? null : DateTime.now().difference(started).inMilliseconds;
       if (r.undetected) {
+        if (beta) await history.logTranslation(src: m.src, tr: m.src, srcLang: 'und', targetLang: target, ms: ms);
         _toast("Couldn't detect language");
         return;
       }
@@ -205,13 +251,12 @@ class ChatterSession extends ChangeNotifier {
       notifyListeners();
       await Future<void>.delayed(const Duration(milliseconds: BubbleTokens.flashMs));
       flashMessageId = null;
-      final elapsed = DateTime.now().difference(started);
       await history.logTranslation(
         src: m.src,
         tr: r.text,
         srcLang: r.source,
         targetLang: target,
-        ms: elapsed.inMilliseconds,
+        ms: ms,
       );
       _toast(
         'Translated · ${_langLabel(r.source)} → ${langName(target)}',

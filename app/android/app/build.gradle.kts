@@ -64,6 +64,8 @@ android {
         release {
             // Debug keys when key.properties is missing, so `flutter run --release` still works locally.
             signingConfig = signingConfigs.findByName("release") ?: signingConfigs.getByName("debug")
+            // ML Kit registrars are created by reflection; R8 must keep them (see proguard-rules.pro).
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 }

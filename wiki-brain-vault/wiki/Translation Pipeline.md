@@ -54,7 +54,18 @@ itself before downloading and throws immediately:
 
 Translation of already-downloaded models is unaffected and works in airplane mode.
 
-## State (2026-09-27)
-Phase 1 done. The decision and its numbers go here after Phase 10.
+## Target languages (Phase 11, 2026-10-18)
+`kFeaturedLangs` = **Arabic** (default for new installs), **French** — listed first, models prefetched from Home
+after onboarding (`Translator.prefetchFeatured`, silent on failure). `kMoreLangs` = Spanish, German, Portuguese
+under "More languages", downloaded when picked. `isRtlLang` / `textDirectionFor` drive RTL wherever a translation
+is shown (detail sheet, reply field, History, Chatter); native boxes use `StaticLayout` (direction from the text,
+wrap, 14 → 11 sp, ellipsize). Verified on the emulator: EN → AR boxes, sheet, AR reply → EN, paste, History.
+Release builds need [[Gotcha - R8 Strips ML Kit]].
+
+## State (2026-10-18)
+Phase 1 done. Phase 10 tooling built — see [[Beta Feedback and Metrics]] (flags, export, `ms` excludes model
+downloads, `und` logged in beta, `tools/beta_metrics.mjs`, `tools/compare_azure.mjs`). First emulator export:
+p90 was 58 s before the fix because `ms` included the German model download.
+**The decision and its numbers go here after the tester week.**
 
 Links: [[Architecture]], [[Bubble Interaction Model]], [[Privacy and Permissions]]

@@ -1,9 +1,6 @@
 package com.relay.relay_translate
 
-import android.Manifest
 import android.app.Activity
-import android.content.pm.PackageManager
-import android.os.Build
 import android.provider.Settings
 import com.relay.relay_translate.bubble.BubblePrefs
 import com.relay.relay_translate.bubble.BubbleService
@@ -41,7 +38,6 @@ class OverlayChannel(private val activity: Activity, messenger: BinaryMessenger)
                     }
                     !Settings.canDrawOverlays(activity) -> result.success(false)
                     else -> {
-                        if (BubbleService.instance == null) askForNotifications()
                         BubbleService.start(activity)
                         result.success(true)
                     }
@@ -57,18 +53,7 @@ class OverlayChannel(private val activity: Activity, messenger: BinaryMessenger)
         }
     }
 
-    /** Android 13+: without it the "Relay bubble is on" notification (and its Hide action) is not shown. */
-    private fun askForNotifications() {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) return
-        if (activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) return
-        activity.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATIONS)
-    }
-
     fun dispose() {
         channel.setMethodCallHandler(null)
-    }
-
-    private companion object {
-        const val REQUEST_NOTIFICATIONS = 7
     }
 }

@@ -1,7 +1,7 @@
 name: relay_translate
 description: "Floating bubble that translates on-screen messages in any app (on-device ML Kit)."
 publish_to: 'none'
-version: 0.1.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.12.0

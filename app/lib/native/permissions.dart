@@ -69,6 +69,15 @@ class Permissions {
 
   Future<void> openAccessibility() => _channel.invokeMethod<void>('openAccessibility');
 
+  /// App info, where "Allow restricted settings" lives for sideloaded apps (Android 13+).
+  Future<void> openAppInfo() => _channel.invokeMethod<void>('openAppInfo');
+
+  /// Android 13+ and notifications not granted yet.
+  Future<bool> notificationsNeeded() async => await _channel.invokeMethod<bool>('notificationsNeeded') ?? false;
+
+  /// Shows Android's notification prompt.
+  Future<void> requestNotifications() => _channel.invokeMethod<void>('requestNotifications');
+
   Future<void> setOnboarded() => _channel.invokeMethod<void>('setOnboarded');
 
   /// Removes `filesDir/onboarded` after the flag lives in SQLite.

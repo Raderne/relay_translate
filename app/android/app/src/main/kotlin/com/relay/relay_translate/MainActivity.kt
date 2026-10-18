@@ -19,6 +19,7 @@ class MainActivity : FlutterActivity() {
     private var overlayEventsChannel: OverlayEventsChannel? = null
     private var overlayChannel: OverlayChannel? = null
     private var updateChannel: UpdateChannel? = null
+    private var betaChannel: BetaChannel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         captureRoute(intent)
@@ -40,6 +41,7 @@ class MainActivity : FlutterActivity() {
         overlayEventsChannel = OverlayEventsChannel.install(messenger)
         overlayChannel = OverlayChannel(this, messenger)
         updateChannel = UpdateChannel(this, messenger, scope)
+        betaChannel = BetaChannel(this, messenger)
     }
 
     override fun onResume() {
@@ -59,6 +61,7 @@ class MainActivity : FlutterActivity() {
         overlayEventsChannel?.dispose()
         overlayChannel?.dispose()
         updateChannel?.dispose()
+        betaChannel?.dispose()
         scope.cancel()
         translator?.close()
         super.onDestroy()

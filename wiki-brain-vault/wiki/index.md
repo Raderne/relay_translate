@@ -14,6 +14,7 @@ Maintained by Claude. Entry point for the vault.
 - [[Bubble Interaction Model]] — gesture state machine and every timing/size number (mirrored Dart ↔ Kotlin)
 - [[Screens and Flows]] — all screens and the 5 main user flows
 - [[Translation Pipeline]] — ML Kit on-device: batch language-id → model download → translate; Phase 10 evaluation gate
+- [[Beta Feedback and Metrics]] — Phase 10: 👎 flags, export, survey; `tools/` metrics + blind Azure comparison
 - [[Per-App Message Rules]] — `AppRules.kt` view-id allow lists (WhatsApp, Gmail, Messages, …)
 - [[Privacy and Permissions]] — permissions, user-facing promises, disclosure text
 - [[Design System - Industry]] — blueprint visual language and Flutter port rules
@@ -27,6 +28,7 @@ Maintained by Claude. Entry point for the vault.
 ## Known Gotchas
 - [[Gotcha - No In-Place Text Replacement]] — other apps' text can't be edited; draw boxes over it
 - [[Gotcha - Play Accessibility Policy]] — Play restrictions on AccessibilityService; de-risk early
+- [[Gotcha - R8 Strips ML Kit]] — release APK crashed at launch; keep ML Kit registrars; test a release build
 - [[Gotcha - Short Message Language Detection]] — ML Kit mis-detects short chat messages; detect on the batch
 
 ## Meta

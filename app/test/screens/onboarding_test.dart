@@ -29,14 +29,15 @@ void main() {
     await tester.pump(const Duration(milliseconds: 400));
   }
 
-  Future<({RelayApp app, SettingsStore settings})> harness(
+  Future<({RelayApp app, SettingsStore settings, PermissionsController controller})> harness(
     FakePermissions fake, {
     bool onboarded = false,
   }) async {
     final settings = SettingsStore.inMemory();
     if (onboarded) await settings.setOnboarded(true);
-    final app = RelayApp(controller: PermissionsController(fake, fake.current), settings: settings);
-    return (app: app, settings: settings);
+    final controller = PermissionsController(fake, fake.current);
+    final app = RelayApp(controller: controller, settings: settings);
+    return (app: app, settings: settings, controller: controller);
   }
 
   testWidgets('Back returns to onboard 1', (tester) async {
@@ -123,6 +124,109 @@ void main() {
     expect(find.text('01'), findsOneWidget);
     expect(find.byKey(const Key('check-02')), findsOneWidget);
   });
+
+  testWidgets('Home starts downloading the missing featured languages (Arabic, French)', (tester) async {
+    final ensured = <Object?>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      Translator.channel,
+      (call) async {
+        final lang = (call.arguments as Map)['lang'];
+        if (call.method == 'modelStatus') return lang == 'fr' ? 'ready' : 'missing';
+        if (call.method == 'ensureModel') ensured.add(lang);
+        return null;
+      },
+    );
+    final fake = FakePermissions(const PermissionStatus(overlay: true, accessibility: true, onboarded: true));
+    final h = await harness(fake, onboarded: true);
+    await tester.pumpWidget(h.app);
+    await settle(tester);
+    expect(ensured, ['ar']);
+  });
+
+  testWidgets('Home caption turns to "works offline" once the Arabic download finishes', (tester) async {
+    var arReady = false;
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger.setMockMethodCallHandler(
+      Translator.channel,
+      (call) async {
+        final lang = (call.arguments as Map)['lang'];
+        if (call.method == 'modelStatus') return lang == 'ar' && !arReady ? 'missing' : 'ready';
+        if (call.method == 'ensureModel') arReady = true;
+        return null;
+      },
+    );
+    final fake = FakePermissions(const PermissionStatus(overlay: true, accessibility: true, onboarded: true));
+    final h = await harness(fake, onboarded: true);
+    await tester.pumpWidget(h.app);
+    await settle(tester);
+    expect(find.text('From any language · works offline'), findsOneWidget);
+  });
+
+  group('asking properly (1.0.0)', () {
+    testWidgets('step 01 explains that Android shows a list of apps', (tester) async {
+      final fake = FakePermissions(const PermissionStatus(overlay: false, accessibility: false, onboarded: false));
+      final h = await harness(fake);
+      await tester.pumpWidget(h.app);
+      await tester.tap(find.text('Continue'));
+      await settle(tester);
+      expect(find.textContaining('tap Relay Translate'), findsOneWidget);
+      fake.current = const PermissionStatus(overlay: true, accessibility: false, onboarded: false);
+      await h.controller.refresh();
+      await settle(tester);
+      expect(find.textContaining('tap Relay Translate'), findsNothing);
+    });
+
+    testWidgets('back from accessibility settings still off → restricted-settings help + App info', (tester) async {
+      final fake = FakePermissions(const PermissionStatus(overlay: true, accessibility: false, onboarded: false));
+      final h = await harness(fake);
+      await tester.pumpWidget(h.app);
+      await tester.tap(find.text('Continue'));
+      await settle(tester);
+      expect(find.textContaining('Restricted setting'), findsNothing);
+
+      await tester.tap(find.text('Open Android settings'));
+      await settle(tester);
+      await tester.tap(find.text('Agree'));
+      await settle(tester);
+      await h.controller.refresh(); // user comes back, still off
+      await settle(tester);
+
+      expect(find.textContaining('Restricted setting'), findsOneWidget);
+      await tester.tap(find.text('Open App info'));
+      await settle(tester);
+      expect(fake.opened, ['accessibility', 'appInfo']);
+    });
+
+    testWidgets('Home explains notifications once, then asks Android', (tester) async {
+      final fake = FakePermissions(const PermissionStatus(overlay: true, accessibility: true, onboarded: true))
+        ..needsNotifications = true;
+      final h = await harness(fake, onboarded: true);
+      await tester.pumpWidget(h.app);
+      await settle(tester);
+      expect(find.text('Turn on notifications'), findsOneWidget);
+      await tester.tap(find.text('Continue'));
+      await settle(tester);
+      expect(fake.notificationRequests, 1);
+      expect(h.settings.notificationsAsked, isTrue);
+    });
+
+    testWidgets('Not now also counts as asked; no prompt when not needed', (tester) async {
+      final fake = FakePermissions(const PermissionStatus(overlay: true, accessibility: true, onboarded: true))
+        ..needsNotifications = true;
+      final h = await harness(fake, onboarded: true);
+      await tester.pumpWidget(h.app);
+      await settle(tester);
+      await tester.tap(find.text('Not now'));
+      await settle(tester);
+      expect(fake.notificationRequests, 0);
+      expect(h.settings.notificationsAsked, isTrue);
+
+      final fake2 = FakePermissions(const PermissionStatus(overlay: true, accessibility: true, onboarded: true));
+      final h2 = await harness(fake2, onboarded: true);
+      await tester.pumpWidget(h2.app);
+      await settle(tester);
+      expect(find.text('Turn on notifications'), findsNothing);
+    });
+  });
 }
 
 class FakePermissions extends Permissions {
@@ -130,6 +234,17 @@ class FakePermissions extends Permissions {
 
   PermissionStatus current;
   final opened = <String>[];
+  var needsNotifications = false;
+  var notificationRequests = 0;
+
+  @override
+  Future<void> openAppInfo() async => opened.add('appInfo');
+
+  @override
+  Future<bool> notificationsNeeded() async => needsNotifications;
+
+  @override
+  Future<void> requestNotifications() async => notificationRequests++;
   var clearedOnboarded = false;
 
   @override

@@ -5,6 +5,11 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.RectF
 import android.graphics.Typeface
+import android.text.Layout
+import android.text.StaticLayout
+import android.text.TextDirectionHeuristics
+import android.text.TextPaint
+import android.text.TextUtils
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
@@ -16,7 +21,6 @@ import com.relay.relay_translate.extract.toAndroidRect
 data class TranslatedOverlayBox(
     val bounds: Rect,
     val translation: String,
-    val tag: String,
     /** Phase 9: what the detail sheet shows when the box is tapped. */
     val original: String = "",
     val sourceLang: String = "",
@@ -106,13 +110,9 @@ class TranslationLayer(
             style = Paint.Style.STROKE
             strokeWidth = dp(1).toFloat()
         }
-        private val textPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+        private val textPaint = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
             color = RelayColors.text
             typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
-        }
-        private val tagPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = RelayColors.accent700
-            textSize = sp(10)
         }
 
         override fun onDraw(canvas: Canvas) {
@@ -121,28 +121,37 @@ class TranslationLayer(
             val r = RectF(0f, 0f, width.toFloat(), height.toFloat())
             canvas.drawRect(r, fill)
             canvas.drawRect(r, stroke)
-            tagPaint.textSize = sp(10)
-            canvas.drawText(box.tag.uppercase(), r.left + dp(4), r.top + dp(12), tagPaint)
-            drawFittedText(canvas, box.translation, r)
+            // No "Translated · EN → AR" line (user decision 2026-10-18): the accent outline marks it;
+            // the pair is in the detail sheet.
+            drawFittedText(canvas, box.translation, r, top = dp(2).toFloat())
         }
 
-        private fun drawFittedText(canvas: Canvas, text: String, rect: RectF) {
-            var size = sp(14)
-            val min = sp(11)
-            val maxWidth = rect.width() - dp(8)
-            val maxHeight = rect.height() - dp(18)
-            textPaint.textSize = size
-            while (size > min && textPaint.measureText(text) > maxWidth) {
-                size -= 1f
-                textPaint.textSize = size
-            }
-            val lineHeight = textPaint.fontMetrics.let { it.descent - it.ascent }
-            var y = rect.top + dp(16) - textPaint.fontMetrics.ascent
-            if (lineHeight > maxHeight) {
-                textPaint.textSize = min
-                y = rect.top + dp(16) - textPaint.fontMetrics.ascent
-            }
-            canvas.drawText(text, rect.left + dp(4), y, textPaint)
+        /**
+         * Wrapped, direction-aware text (Phase 11): StaticLayout picks RTL from the text itself, so Arabic
+         * aligns right; shrinks 14 → 11 sp to fit, then ellipsizes. Tap the box for the full text.
+         */
+        private fun drawFittedText(canvas: Canvas, text: String, rect: RectF, top: Float) {
+            val width = (rect.width() - dp(8)).toInt().coerceAtLeast(1)
+            val available = rect.height() - top - dp(2)
+            val size = FitText.largestFitting(max = sp(14), min = sp(11)) { s -> layout(text, s, width).height <= available }
+            val probe = layout(text, size, width)
+            val lineHeight = probe.height.toFloat() / probe.lineCount.coerceAtLeast(1)
+            val fitted = layout(text, size, width, maxLines = FitText.linesThatFit(available, lineHeight))
+            canvas.save()
+            canvas.translate(rect.left + dp(4), rect.top + top)
+            fitted.draw(canvas)
+            canvas.restore()
+        }
+
+        private fun layout(text: String, sizePx: Float, width: Int, maxLines: Int = Int.MAX_VALUE): StaticLayout {
+            textPaint.textSize = sizePx
+            return StaticLayout.Builder.obtain(text, 0, text.length, textPaint, width)
+                .setTextDirection(TextDirectionHeuristics.FIRSTSTRONG_LTR)
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setMaxLines(maxLines)
+                .setEllipsize(TextUtils.TruncateAt.END)
+                .setIncludePad(false)
+                .build()
         }
 
         private fun dp(v: Int): Int =

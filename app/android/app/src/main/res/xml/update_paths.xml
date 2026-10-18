@@ -2,4 +2,6 @@
 <!-- UpdateChannel downloads the new APK here and hands it to the system installer. -->
 <paths>
     <cache-path name="updates" path="updates/" />
+    <!-- Phase 10: "Export beta feedback" JSON for the share sheet (BetaChannel). -->
+    <cache-path name="exports" path="exports/" />
 </paths>

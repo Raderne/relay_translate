@@ -29,16 +29,58 @@ class HistoryRepository {
     required String tr,
     required String srcLang,
     required String targetLang,
-    required int ms,
+    required int? ms,
     String appPackage = kChatterPackage,
     String appLabel = kChatterLabel,
   }) async {
     final now = DateTime.now().millisecondsSinceEpoch;
     final key = historyDedupeKey(targetLang, src);
+    final values = {
+      'tr': tr,
+      'src_lang': srcLang,
+      'app_package': appPackage,
+      'app_label': appLabel,
+      'engine': 'mlkit',
+      'ms': ms,
+      'created_at': now,
+    };
     await _db.transaction((txn) async {
-      await txn.insert(
-        'history',
-        {
+      // Update-then-insert, not REPLACE: a re-translation must keep the tester's flag + note (Phase 10).
+      // (No ON CONFLICT DO UPDATE: Android 8's SQLite predates it.)
+      final updated = await txn.update('history', values, where: 'dedupe_key = ?', whereArgs: [key]);
+      if (updated == 0) {
+        await txn.insert('history', {
+          ...values,
+          'dedupe_key': key,
+          'src': src,
+          'target_lang': targetLang,
+          'flagged': 0,
+          'note': null,
+        });
+      }
+      await _trimToMaxRows(txn);
+    });
+  }
+
+  /// Beta 👎: flag (or unflag) one translation. Inserts the row when it isn't there yet — over another app
+  /// the sheet can open before the buffered history row lands; [logTranslation] then keeps the flag.
+  Future<void> setFlag({
+    required String src,
+    required String tr,
+    required String srcLang,
+    required String targetLang,
+    required String appPackage,
+    required String appLabel,
+    required bool flagged,
+    String? note,
+  }) async {
+    final key = historyDedupeKey(targetLang, src);
+    final flag = {'flagged': flagged ? 1 : 0, 'note': flagged ? note : null};
+    await _db.transaction((txn) async {
+      final updated = await txn.update('history', flag, where: 'dedupe_key = ?', whereArgs: [key]);
+      if (updated == 0) {
+        await txn.insert('history', {
+          ...flag,
           'dedupe_key': key,
           'src': src,
           'tr': tr,
@@ -47,15 +89,24 @@ class HistoryRepository {
           'app_package': appPackage,
           'app_label': appLabel,
           'engine': 'mlkit',
-          'ms': ms,
-          'flagged': 0,
-          'note': null,
-          'created_at': now,
-        },
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
-      await _trimToMaxRows(txn);
+          'ms': null,
+          'created_at': DateTime.now().millisecondsSinceEpoch,
+        });
+        await _trimToMaxRows(txn);
+      }
     });
+  }
+
+  /// "Export beta feedback": the Phase 10 fields, oldest first. Contains message text — the UI warns.
+  Future<String> exportBetaJson() async {
+    final rows = await _db.query(
+      'history',
+      columns: ['src', 'tr', 'src_lang', 'target_lang', 'app_label', 'engine', 'ms', 'flagged', 'note'],
+      orderBy: 'created_at ASC, id ASC',
+    );
+    return jsonEncode([
+      for (final r in rows) {...r, 'flagged': r['flagged'] == 1},
+    ]);
   }
 
   Future<List<HistoryEntry>> fetchAll() async {

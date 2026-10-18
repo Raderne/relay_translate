@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/languages.dart';
 import '../theme/theme.dart';
 
 /// Detail / reply sheet from the prototype. Pure view: used by Chatter (Phase 5) and over other apps in
@@ -23,6 +24,11 @@ class DetailSheet extends StatefulWidget {
     required this.onReplyChanged,
     required this.onTranslateReply,
     required this.onPaste,
+    this.translationLang,
+    this.originalLang,
+    this.flagged = false,
+    this.onFlag,
+    this.onNoteChanged,
     super.key,
   });
 
@@ -30,6 +36,11 @@ class DetailSheet extends StatefulWidget {
   final String kicker;
   final String translation;
   final String original;
+
+  /// Language codes of [translation] / [original]; drive RTL for Arabic (Phase 11).
+  /// The reply is typed in [translationLang] and translated into [originalLang].
+  final String? translationLang;
+  final String? originalLang;
   final bool replyMode;
 
   /// "Your reply in French"
@@ -53,16 +64,23 @@ class DetailSheet extends StatefulWidget {
   final VoidCallback onTranslateReply;
   final VoidCallback onPaste;
 
+  /// Beta 👎 (Phase 10). [onFlag] null → no button (release builds).
+  final bool flagged;
+  final ValueChanged<bool>? onFlag;
+  final ValueChanged<String>? onNoteChanged;
+
   @override
   State<DetailSheet> createState() => _DetailSheetState();
 }
 
 class _DetailSheetState extends State<DetailSheet> {
   final _replyController = TextEditingController();
+  final _noteController = TextEditingController();
 
   @override
   void dispose() {
     _replyController.dispose();
+    _noteController.dispose();
     super.dispose();
   }
 
@@ -90,6 +108,15 @@ class _DetailSheetState extends State<DetailSheet> {
                     Row(
                       children: [
                         Expanded(child: Kicker(w.kicker)),
+                        if (w.onFlag != null)
+                          RelayButton.icon(
+                            icon: RelayIcon(
+                              RelayIcons.thumbsDown,
+                              color: w.flagged ? RelayColors.accent700 : RelayColors.neutral600,
+                            ),
+                            onPressed: () => w.onFlag!(!w.flagged),
+                            tooltip: 'Flag bad translation',
+                          ),
                         RelayButton.icon(
                           icon: const RelayIcon(RelayIcons.x),
                           onPressed: w.onClose,
@@ -97,10 +124,26 @@ class _DetailSheetState extends State<DetailSheet> {
                         ),
                       ],
                     ),
-                    Text(w.translation, style: RelayType.detailTranslation),
+                    Text(
+                      w.translation,
+                      style: RelayType.detailTranslation,
+                      textDirection: textDirectionFor(w.translationLang),
+                    ),
                     const SizedBox(height: 12),
                     Text('ORIGINAL', style: RelayType.h6.copyWith(color: RelayColors.neutral600)),
-                    Text(w.original, style: RelayType.bodyMuted.copyWith(fontSize: 14)),
+                    Text(
+                      w.original,
+                      style: RelayType.bodyMuted.copyWith(fontSize: 14),
+                      textDirection: textDirectionFor(w.originalLang),
+                    ),
+                    if (w.onFlag != null && w.flagged) ...[
+                      const SizedBox(height: 8),
+                      RelayInput(
+                        controller: _noteController,
+                        label: "What's wrong? (optional)",
+                        onChanged: w.onNoteChanged,
+                      ),
+                    ],
                     if (!w.replyMode) ...[
                       const SizedBox(height: 12),
                       Row(
@@ -122,6 +165,7 @@ class _DetailSheetState extends State<DetailSheet> {
                         label: w.replyFieldLabel,
                         maxLines: 3,
                         onChanged: w.onReplyChanged,
+                        textDirection: textDirectionFor(w.translationLang),
                       ),
                       if (w.replyTranslated != null) ...[
                         const SizedBox(height: 8),
@@ -132,7 +176,11 @@ class _DetailSheetState extends State<DetailSheet> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Kicker(w.replyLangLabel),
-                                Text(w.replyTranslated!, style: RelayType.rowLabel),
+                                Text(
+                                  w.replyTranslated!,
+                                  style: RelayType.rowLabel,
+                                  textDirection: textDirectionFor(w.originalLang),
+                                ),
                               ],
                             ),
                           ),

@@ -1,12 +1,17 @@
 import 'package:flutter/services.dart';
 
+import '../data/languages.dart';
+
 /// One translated text plus the language it was detected as (BCP-47, or
 /// `und` when ML Kit could not tell — then [text] is the untouched original).
 class Translation {
-  const Translation({required this.text, required this.source});
+  const Translation({required this.text, required this.source, this.downloaded = false});
 
   final String text;
   final String source;
+
+  /// The call had to download a model first, so its duration isn't translation latency (Phase 10).
+  final bool downloaded;
 
   bool get undetected => source == 'und';
 }
@@ -52,7 +57,11 @@ class Translator {
     });
     return raw.map((e) {
       final m = e! as Map<Object?, Object?>;
-      return Translation(text: m['text']! as String, source: m['source']! as String);
+      return Translation(
+        text: m['text']! as String,
+        source: m['source']! as String,
+        downloaded: m['downloaded'] == true,
+      );
     }).toList(growable: false);
   }
 
@@ -63,6 +72,18 @@ class Translator {
   Future<ModelStatus> modelStatus(String lang) async {
     final s = await _invoke<String>('modelStatus', {'lang': lang});
     return ModelStatus.values.byName(s);
+  }
+
+  /// Phase 11: download the featured languages (Arabic, French) in the background after onboarding.
+  /// Failures (offline, Wi-Fi only on mobile data) are silent: the model downloads when first needed.
+  Future<void> prefetchFeatured({required bool wifiOnly}) async {
+    for (final lang in kFeaturedLangs) {
+      try {
+        if (await modelStatus(lang.code) == ModelStatus.missing) await ensureModel(lang.code, wifiOnly: wifiOnly);
+      } on TranslateException {
+        // retried on next start / first translation
+      }
+    }
   }
 
   Future<void> deleteModel(String lang) => _invoke<void>('deleteModel', {'lang': lang});

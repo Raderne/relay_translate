@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
+import '../data/history_repository.dart';
 import '../native/translator.dart';
 
 /// What `DetailActivity` was opened with: one translated message from another app (Phase 9).
@@ -57,11 +58,16 @@ class CrossAppDetailSession extends ChangeNotifier {
     required this.args,
     this.translator = const Translator(),
     this.bridge = const DetailBridge(),
+    this.history,
   });
 
   final DetailArgs args;
   final Translator translator;
   final DetailBridge bridge;
+
+  /// Beta only (Phase 10): where 👎 goes. Null → no flag button.
+  final HistoryRepository? history;
+  bool flagged = false;
 
   bool replyMode = false;
   String replyDraft = '';
@@ -94,6 +100,28 @@ class CrossAppDetailSession extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> setFlag(bool value) async {
+    flagged = value;
+    notifyListeners();
+    await _saveFlag(note: null);
+  }
+
+  Future<void> setNote(String note) async {
+    if (!flagged) return;
+    await _saveFlag(note: note);
+  }
+
+  Future<void> _saveFlag({required String? note}) async => history?.setFlag(
+    src: args.src,
+    tr: args.tr,
+    srcLang: args.source,
+    targetLang: args.target,
+    appPackage: args.appPackage,
+    appLabel: args.appLabel,
+    flagged: flagged,
+    note: note,
+  );
 
   Future<void> paste() async {
     final text = replyTranslated;

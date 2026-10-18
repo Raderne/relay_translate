@@ -69,4 +69,19 @@ void main() {
       ),
     );
   });
+
+  test('translate reads downloaded: the call had to fetch a model (Phase 10 latency)', () async {
+    mock((_) => [
+      {'text': 'Salut', 'source': 'en', 'downloaded': true},
+    ]);
+    final out = await translator.translate(['Hi'], 'fr');
+    expect(out.single.downloaded, isTrue);
+  });
+
+  test('downloaded defaults to false when native omits it', () async {
+    mock((_) => [
+      {'text': 'Salut', 'source': 'en'},
+    ]);
+    expect((await translator.translate(['Hi'], 'fr')).single.downloaded, isFalse);
+  });
 }

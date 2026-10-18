@@ -1,6 +1,9 @@
 package com.relay.relay_translate
 
+import android.Manifest
 import android.content.ActivityNotFoundException
+import android.content.pm.PackageManager
+import android.os.Build
 import android.content.ComponentName
 import android.content.Intent
 import android.net.Uri
@@ -17,7 +20,8 @@ import java.io.File
  * sqflite `settings` row replaces it. Dart never asks Android itself.
  *
  * - `status` → `{overlay, accessibility, onboarded}`
- * - `openOverlay` / `openAccessibility` → null
+ * - `openOverlay` / `openAccessibility` / `openAppInfo` → null
+ * - `notificationsNeeded` → Bool (Android 13+ and not granted); `requestNotifications` → null
  * - `setOnboarded` → null (legacy; prefer SQLite `onboarded`)
  * - `clearOnboarded` → null (delete files-dir flag after migration)
  */
@@ -44,6 +48,22 @@ class PermissionsChannel(
             }
             "openAccessibility" -> {
                 openAccessibility()
+                result.success(null)
+            }
+            "openAppInfo" -> {
+                activity.startActivity(
+                    Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:${activity.packageName}")),
+                )
+                result.success(null)
+            }
+            "notificationsNeeded" -> result.success(
+                Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                    activity.checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED,
+            )
+            "requestNotifications" -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    activity.requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), REQUEST_NOTIFICATIONS)
+                }
                 result.success(null)
             }
             "setOnboarded" -> {
@@ -94,5 +114,6 @@ class PermissionsChannel(
     private companion object {
         const val NAME = "relay/permissions"
         const val ONBOARDED_FILE = "onboarded"
+        const val REQUEST_NOTIFICATIONS = 7
     }
 }

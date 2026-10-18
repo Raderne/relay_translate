@@ -7,6 +7,10 @@ class HistoryEntry {
     required this.targetLang,
     required this.appLabel,
     required this.createdAt,
+    this.appPackage = '',
+    this.ms,
+    this.flagged = false,
+    this.note,
   });
 
   final int id;
@@ -16,6 +20,14 @@ class HistoryEntry {
   final String targetLang;
   final String appLabel;
   final int createdAt;
+  final String appPackage;
+
+  /// Translate duration; null when a model download was part of it (Phase 10).
+  final int? ms;
+
+  /// Beta 👎 (Phase 10).
+  final bool flagged;
+  final String? note;
 
   static HistoryEntry fromMap(Map<String, Object?> row) => HistoryEntry(
     id: row['id']! as int,
@@ -25,6 +37,10 @@ class HistoryEntry {
     targetLang: row['target_lang']! as String,
     appLabel: row['app_label']! as String,
     createdAt: row['created_at']! as int,
+    appPackage: row['app_package'] as String? ?? '',
+    ms: row['ms'] as int?,
+    flagged: row['flagged'] == 1,
+    note: row['note'] as String?,
   );
 
   String metaLine() {

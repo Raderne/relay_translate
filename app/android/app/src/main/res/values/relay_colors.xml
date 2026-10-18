@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- XML mirror of app/lib/theme/tokens.dart for launcher icon + launch screen. Keep the values identical. -->
+<resources>
+    <color name="relay_bg">#F2F2F3</color>
+    <color name="relay_accent_400">#94BCE3</color>
+    <color name="relay_accent_500">#749DC4</color>
+    <color name="relay_accent_700">#416180</color>
+    <color name="relay_accent_900">#1D2D3D</color>
+</resources>

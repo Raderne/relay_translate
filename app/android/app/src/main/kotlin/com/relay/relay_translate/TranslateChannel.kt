@@ -10,7 +10,7 @@ import kotlinx.coroutines.launch
  * `relay/translate` MethodChannel — Dart's only way to translate (mirrors `lib/native/translator.dart`).
  *
  * Methods (all arguments are a Map):
- * - `translate {texts: List<String>, target: String, wifiOnly?: Bool}` → `List<{text, source}>`
+ * - `translate {texts: List<String>, target: String, wifiOnly?: Bool}` → `List<{text, source, downloaded}>`
  * - `ensureModel {lang: String, wifiOnly?: Bool}` → null
  * - `modelStatus {lang: String}` → "ready" | "downloading" | "missing"
  * - `deleteModel {lang: String}` → null
@@ -42,7 +42,7 @@ class TranslateChannel(
     private suspend fun handle(call: MethodCall): Any? = when (call.method) {
         "translate" -> translator
             .translate(call.list("texts"), call.string("target"), call.wifiOnly())
-            .map { mapOf("text" to it.text, "source" to it.source) }
+            .map { mapOf("text" to it.text, "source" to it.source, "downloaded" to it.downloaded) }
         "ensureModel" -> translator.ensureModel(call.string("lang"), call.wifiOnly()).let { null }
         "modelStatus" -> translator.modelStatus(call.string("lang"))
         "deleteModel" -> translator.deleteModel(call.string("lang")).let { null }

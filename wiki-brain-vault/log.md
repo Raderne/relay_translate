@@ -52,3 +52,12 @@ Touched: Android Overlay and Accessibility, Bubble Interaction Model, Phases Roa
 
 ## [2026-10-18 16:20] session | Phase 9 reply and paste
 Touched: Screens and Flows, Android Overlay and Accessibility, Per-App Message Rules, Deviations from Prototype, Phases Roadmap
+
+## [2026-10-18 16:50] session | Phase 10 beta feedback tooling
+Touched: Beta Feedback and Metrics (new), index, Translation Pipeline, Database Schema, Phases Roadmap
+
+## [2026-10-18 15:57] session | Android launcher icon and splash
+Touched: Design System - Industry, Deviations from Prototype
+
+## [2026-10-18 17:30] session | Arabic, hardening, permissions, 1.0.0
+Touched: Translation Pipeline, Privacy and Permissions, Per-App Message Rules, Deviations from Prototype, Phases Roadmap, Gotcha - R8 Strips ML Kit (new), index

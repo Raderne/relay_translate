@@ -10,7 +10,8 @@ Future<String?> showLanguageSheet(BuildContext context) {
   return RelaySheet.show<String>(
     context,
     builder: (context) {
-      return Padding(
+      // Scrolls: five languages + "More languages" overflow a bottom sheet on small screens / large text.
+      return SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(20, 18, 20, 36),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -18,7 +19,12 @@ Future<String?> showLanguageSheet(BuildContext context) {
           children: [
             Text('Translate into', style: RelayType.h4),
             const SizedBox(height: 8),
-            for (final lang in kLangs) _LangRow(lang: lang, selected: lang.code == selected),
+            for (final lang in kFeaturedLangs) _LangRow(lang: lang, selected: lang.code == selected),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(4, 18, 4, 2),
+              child: Text('More languages', style: RelayType.h6.copyWith(color: RelayColors.neutral700)),
+            ),
+            for (final lang in kMoreLangs) _LangRow(lang: lang, selected: lang.code == selected),
           ],
         ),
       );

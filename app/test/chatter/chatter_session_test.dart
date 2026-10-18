@@ -35,7 +35,7 @@ void main() {
     await session.translateAll();
 
     expect(session.incoming.first.display, startsWith('[FR]'));
-    expect(session.toastMessage, contains('messages · English → French'));
+    expect(session.toastMessage, contains('messages · English → Arabic'));
 
     messenger.setMockMethodCallHandler(Translator.channel, null);
   });

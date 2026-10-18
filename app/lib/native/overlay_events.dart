@@ -22,7 +22,7 @@ class OverlayEvents {
         tr: item['tr']! as String,
         srcLang: item['src_lang']! as String,
         targetLang: item['target_lang']! as String,
-        ms: (item['ms'] as num).toInt(),
+        ms: (item['ms'] as num?)?.toInt(),
         appPackage: item['app_package']! as String,
         appLabel: item['app_label']! as String,
       );

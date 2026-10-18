@@ -60,6 +60,10 @@ class Onboard2Screen extends StatefulWidget {
 class _Onboard2ScreenState extends State<Onboard2Screen> with WidgetsBindingObserver {
   var _gen = 0;
 
+  /// Came back from accessibility settings at least once. If it's still off, a sideloaded APK is
+  /// probably blocked by Android 13+ "Restricted setting": show how to allow it.
+  var _visitedAccessibility = false;
+
   @override
   void initState() {
     super.initState();
@@ -103,6 +107,7 @@ class _Onboard2ScreenState extends State<Onboard2Screen> with WidgetsBindingObse
       case PermissionStep.disclosure:
         final agreed = await showAccessibilityDisclosure(context);
         if (!agreed || !mounted) return;
+        setState(() => _visitedAccessibility = true);
         await scope.permissions.openAccessibility();
       case PermissionStep.home:
         await _maybeLeave();
@@ -155,6 +160,28 @@ class _Onboard2ScreenState extends State<Onboard2Screen> with WidgetsBindingObse
               ],
             ),
           ),
+          if (!status.overlay) ...[
+            const SizedBox(height: 12),
+            const Text(
+              'Android shows a list of apps: tap Relay Translate, then turn it on.',
+              style: RelayType.cardCaption,
+            ),
+          ],
+          if (status.overlay && !status.accessibility && _visitedAccessibility) ...[
+            const SizedBox(height: 12),
+            const Text(
+              'Is the switch greyed out with "Restricted setting"? Android blocks it for apps installed '
+              'outside the Play Store. Open App info, tap the menu (top right), choose '
+              '"Allow restricted settings", then try again.',
+              style: RelayType.cardCaption,
+            ),
+            const SizedBox(height: 8),
+            RelayButton.secondary(
+              label: 'Open App info',
+              expand: true,
+              onPressed: () => unawaited(RelayScope.of(context).permissions.openAppInfo()),
+            ),
+          ],
           const Spacer(),
           RelayButton.primary(
             label: 'Open Android settings',
@@ -179,9 +206,18 @@ class _OnboardFrame extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
-          child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+        // Scrolls when the content (help text, large font) is taller than the screen; otherwise the
+        // Spacer still pushes the buttons to the bottom.
+        child: LayoutBuilder(
+          builder: (context, constraints) => SingleChildScrollView(
+            padding: const EdgeInsets.fromLTRB(24, 28, 24, 20),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(minHeight: constraints.maxHeight - 48),
+              child: IntrinsicHeight(
+                child: Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: children),
+              ),
+            ),
+          ),
         ),
       ),
     );

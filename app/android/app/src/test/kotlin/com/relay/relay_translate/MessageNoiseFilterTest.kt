@@ -19,4 +19,13 @@ class MessageNoiseFilterTest {
         assertFalse(MessageNoiseFilter.isNoise("Hey! Did you make it to London okay?"))
         assertFalse(MessageNoiseFilter.isNoise("ok"))
     }
+
+    // Seen on Google Messages (2026-10-18): the day divider "4:03 PM" was translated and logged.
+    @Test
+    fun rejectsTwelveHourTimestamps() {
+        assertTrue(MessageNoiseFilter.isNoise("4:03 PM"))
+        assertTrue(MessageNoiseFilter.isNoise("11:45 am"))
+        assertTrue(MessageNoiseFilter.isNoise("9:05PM"))
+        assertFalse(MessageNoiseFilter.isNoise("4:03 PM works for me"))
+    }
 }

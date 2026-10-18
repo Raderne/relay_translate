@@ -11,6 +11,7 @@ import com.relay.relay_translate.Translator
 import com.relay.relay_translate.extract.DropTargetSelector
 import com.relay.relay_translate.extract.ScreenMessage
 import com.relay.relay_translate.history.HistoryEventBuffer
+import com.relay.relay_translate.history.HistoryRows
 import com.relay.relay_translate.paste.Paster
 import com.relay.relay_translate.paste.awaitForeground
 import com.relay.relay_translate.ui.TranslatedOverlayBox
@@ -81,23 +82,19 @@ class AccessibilityTranslateCoordinator(
             val results = translator.translate(targets.map { it.text }, targetLang, wifiOnly)
             val appPackage = pkg ?: "unknown"
             val label = appLabel(appPackage)
+            HistoryRows.build(
+                sources = targets.map { it.text },
+                results = results,
+                appPackage = appPackage,
+                appLabel = label,
+                targetLang = targetLang,
+                elapsedMs = System.currentTimeMillis() - started,
+                beta = service.packageName.endsWith(".beta"), // applicationIdSuffix of the beta flavor
+            ).forEach(onHistory)
             val boxes = mutableListOf<TranslatedOverlayBox>()
             targets.zip(results).forEach { (msg, res) ->
                 if (res.source == "und") return@forEach
-                val elapsed = System.currentTimeMillis() - started
-                onHistory(
-                    HistoryEventBuffer.HistoryItem(
-                        appPackage = appPackage,
-                        appLabel = label,
-                        src = msg.text,
-                        tr = res.text,
-                        srcLang = res.source,
-                        targetLang = targetLang,
-                        ms = elapsed,
-                    ),
-                )
-                val tag = "Translated · ${res.source.uppercase()} → ${targetLang.uppercase()}"
-                boxes += TranslatedOverlayBox(msg.bounds, res.text, tag, original = msg.text, sourceLang = res.source)
+                boxes += TranslatedOverlayBox(msg.bounds, res.text, original = msg.text, sourceLang = res.source)
             }
             layer.setProgress(false)
             if (boxes.isEmpty()) {

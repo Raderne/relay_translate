@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Relay app mark (design: "Launch" app icon, 120 px tile). The 120 tile maps to the launcher's
+     visible 72 of 108 dp, so viewport 180 with the tile at 30,30. Also the launch-screen mark. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="180"
+    android:viewportHeight="180">
+    <group
+        android:translateX="30"
+        android:translateY="30">
+        <!-- Blueprint frame (inset 20, accent-700); right/bottom edges stop at the bubble's ring. -->
+        <path
+            android:pathData="M68.45,99.5H20.5V20.5H99.5V68.45"
+            android:strokeWidth="1"
+            android:strokeColor="@color/relay_accent_700" />
+        <!-- Corner marks (accent-400); the bottom-right one mostly hides under the bubble. -->
+        <path
+            android:pathData="M20.5,15v11M15,20.5h11M99.5,15v11M94,20.5h11M20.5,94v11M15,99.5h11M101.55,99.5H105M99.5,101.55V105"
+            android:strokeWidth="1"
+            android:strokeColor="@color/relay_accent_400" />
+        <!-- Two message lines (accent-500). -->
+        <path
+            android:pathData="M30.5,33.5h45v10h-45zM30.5,51.5h31v10h-31z"
+            android:strokeWidth="1"
+            android:strokeColor="@color/relay_accent_500" />
+        <!-- Bubble: 44 px circle, 2 px accent-900 ring = gap to the background. -->
+        <path
+            android:pathData="M65,85a20,20 0,1 0,40 0a20,20 0,1 0,-40 0z"
+            android:fillColor="@color/relay_accent_500" />
+        <!-- Lucide "languages", 22 px, stroke 1.5. -->
+        <group
+            android:translateX="74"
+            android:translateY="74"
+            android:scaleX="0.916667"
+            android:scaleY="0.916667">
+            <path
+                android:pathData="M5,8l6,6M4,14l6,-6l2,-3M2,5h12M7,2h1M22,22l-5,-10l-5,10M14,18h6"
+                android:strokeWidth="1.5"
+                android:strokeColor="@color/relay_bg"
+                android:strokeLineCap="round"
+                android:strokeLineJoin="round" />
+        </group>
+    </group>
+</vector>

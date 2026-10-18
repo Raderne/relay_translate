@@ -13,8 +13,9 @@ generic leaf-text heuristic in [[Android Overlay and Accessibility]] (`MessageTr
 Ids match on the part after `:id/`: Compose apps (Google Messages) report the bare id, e.g. `message_text`
 (seen with `uiautomator dump`). Covered by `AppRulesTest`.
 
-Known gaps (seen on the emulator, Google Messages): the "4:03 PM" divider and "Texting with … (SMS/MMS)" line
-also get boxes, and long translations are clipped to the bubble's height. Phase 8 device-matrix work.
+Google Messages reuses `message_text` for info lines; real bubbles always carry a (localized) content description
+("555-1234 said …"), so that app also requires a non-empty description (`AppRules.needsDescription`). The noise
+filter drops 12-hour timestamps ("4:03 PM"). Both fixed 2026-10-18 (`AppRulesTest`, `MessageNoiseFilterTest`).
 
 Telegram draws many bubbles with custom views — no stable id yet; falls back to generic extraction
 (content descriptions + visible text leaves). Update this table when the Phase 8 manual matrix finds

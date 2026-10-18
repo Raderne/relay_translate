@@ -38,7 +38,7 @@ void main() {
   });
 
   testWidgets('loads the message, then reply → translate → paste into the app', (tester) async {
-    await tester.pumpWidget(const DetailApp());
+    await tester.pumpWidget(DetailApp());
     await tester.pump();
 
     expect(find.text('English → French · WhatsApp'.toUpperCase()), findsOneWidget);

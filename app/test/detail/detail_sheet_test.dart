@@ -6,13 +6,23 @@ import 'package:relay_translate/theme/theme.dart';
 void main() {
   final taps = <String>[];
   final typed = <String>[];
+  final flags = <bool>[];
+  final notes = <String>[];
 
   setUp(() {
     taps.clear();
     typed.clear();
+    flags.clear();
+    notes.clear();
   });
 
-  Widget sheet({bool replyMode = false, String? replyTranslated, bool replyBusy = false}) {
+  Widget sheet({
+    bool replyMode = false,
+    String? replyTranslated,
+    bool replyBusy = false,
+    bool beta = false,
+    bool flagged = false,
+  }) {
     return MaterialApp(
       theme: RelayTheme.data,
       home: Scaffold(
@@ -34,6 +44,9 @@ void main() {
           onReplyChanged: typed.add,
           onTranslateReply: () => taps.add('translate'),
           onPaste: () => taps.add('paste'),
+          flagged: flagged,
+          onFlag: beta ? flags.add : null,
+          onNoteChanged: notes.add,
         ),
       ),
     );
@@ -77,5 +90,27 @@ void main() {
     await tester.pumpWidget(sheet(replyMode: true, replyBusy: true));
     await tester.tap(find.text('Translating…'));
     expect(taps, isEmpty);
+  });
+
+  group('beta flag (Phase 10)', () {
+    testWidgets('no flag button outside the beta', (tester) async {
+      await tester.pumpWidget(sheet());
+      expect(find.byTooltip('Flag bad translation'), findsNothing);
+    });
+
+    testWidgets('tapping 👎 flags; no note field until flagged', (tester) async {
+      await tester.pumpWidget(sheet(beta: true));
+      expect(find.text("What's wrong? (optional)"), findsNothing);
+      await tester.tap(find.byTooltip('Flag bad translation'));
+      expect(flags, [true]);
+    });
+
+    testWidgets('a flagged sheet takes a note and can be unflagged', (tester) async {
+      await tester.pumpWidget(sheet(beta: true, flagged: true));
+      await tester.enterText(find.byType(TextField), 'too formal');
+      expect(notes.last, 'too formal');
+      await tester.tap(find.byTooltip('Flag bad translation'));
+      expect(flags, [false]);
+    });
   });
 }

@@ -32,6 +32,7 @@ wiki-brain-vault/   knowledge base (see below)
 | Single Dart test | `cd app && flutter test test/bubble/<file>_test.dart` (add `--name "<test name>"` to narrow) |
 | Kotlin unit tests | `cd app/android && ./gradlew :app:testBetaDebugUnitTest` (one class: `--tests "*DropTargetSelectorTest"`) |
 | Release | bump `version:` in `app/pubspec.yaml`, add a `## [x.y.z]` section to `CHANGELOG.md`, push tag `vx.y.z` on `develop` → `.github/workflows/release.yml` builds signed per-ABI `beta` APKs and publishes a GitHub Release |
+| Team tools (Phase 10) | `node --test "tools/test/*.test.mjs"` · `node tools/beta_metrics.mjs <exports>` · `node --env-file=tools/.env tools/compare_azure.mjs <exports>` |
 | Server (Phase 12 only) | `cd server && node --env-file=.env src/index.js` / `node --test` |
 
 Dart tests in `app/test/` mirror `app/lib/` folders; Kotlin tests live in `app/android/app/src/test/`.

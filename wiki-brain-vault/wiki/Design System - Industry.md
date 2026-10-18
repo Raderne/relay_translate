@@ -32,7 +32,19 @@ Source: `wiki-brain-vault/raw/design/styles.css` + `readme.md`. Flutter port liv
 | `RelayToast` / `.show` | `widgets.dart` | 3.5 s |
 | `RelayIcon`, `RelayIcons` | `icons.dart` | Lucide SVG, stroke 1.5, via `flutter_svg`. Includes `check` (granted permission rows) |
 
-Native overlay views ([[Android Overlay and Accessibility]]) must reuse the same values — keep a Kotlin
-`RelayColors.kt` mirror and note it here when created. Not built yet; the overlay is Phase 7.
+Native overlay views ([[Android Overlay and Accessibility]]) reuse the same values via the Kotlin mirror
+`ui/RelayColors.kt`. Android XML resources use a second mirror, `res/values/relay_colors.xml`
+(`relay_bg`, `relay_accent_400/500/700/900`) — keep both identical to `tokens.dart`.
+
+## App icon and launch screen
+From the design's "Launch" screen and app-icon tile (120 px, accent-900 ground): blueprint frame
+(accent-700, accent-400 marks), two message lines (accent-500), accent-500 bubble with a 2 px accent-900
+ring and the Lucide languages glyph in bg.
+- `drawable/ic_launcher_foreground.xml` — the mark. Viewport 180 with the 120 tile at 30,30, so the tile fills
+  the launcher's visible 72 of 108 dp. `ic_launcher_monochrome.xml` = Android 13 themed icon (bubble as outline).
+- `mipmap-anydpi/ic_launcher.xml` — adaptive icon; minSdk 26 so there are no PNG mipmaps.
+- Launch screen: `LaunchTheme` (light + night) → API 26–30 `launch_background.xml` (mark at 180 dp = 120 dp tile),
+  API 31+ `windowSplashScreen*` with `splash_icon.xml` (inset so the tile lands at 120 of 288 dp).
+  Native only shows the mark; see [[Deviations from Prototype]].
 
 Links: [[Design Source]], [[Flutter App]], [[Screens and Flows]]

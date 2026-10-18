@@ -16,6 +16,7 @@ class RelayIcons {
   static const wifi = 'assets/icons/wifi.svg';
   static const battery = 'assets/icons/battery.svg';
   static const check = 'assets/icons/check.svg';
+  static const thumbsDown = 'assets/icons/thumbs-down.svg';
 
   static const all = <String>[
     languages,
@@ -27,6 +28,7 @@ class RelayIcons {
     wifi,
     battery,
     check,
+    thumbsDown,
   ];
 }
 

@@ -15,10 +15,13 @@ The build plan lives in `phases/` (one file per phase, each with tasks + exit cr
 | 7 | System overlay bubble | `phases/07-overlay-service.md` | code + JVM/Dart tests (2026-10-18); device checks pending |
 | 8 | Accessibility translate | `phases/08-accessibility-translate.md` | code + JVM tests; first device run 2026-10-18 fixed 3 bugs (see [[Android Overlay and Accessibility]]); device matrix pending |
 | 9 | Reply + paste | `phases/09-reply-paste.md` | code + tests; verified end-to-end on emulator in Google Messages (2026-10-18); WhatsApp on a phone pending |
-| 10 | Tester beta + ML Kit evaluation (**decision gate**) | `phases/10-tester-beta.md` | not started |
-| 11 | Hardening | `phases/11-hardening.md` | not started |
+| 10 | Tester beta + ML Kit evaluation (**decision gate**) | `phases/10-tester-beta.md` | tooling built + tested (2026-10-18, [[Beta Feedback and Metrics]]); testers, survey URL, decision pending |
+| 11 | Hardening | `phases/11-hardening.md` | partly (2026-10-18): Arabic + RTL, featured FR/AR prefetch, box wrapping, Messages noise, permission asking, R8 fix. Open: Translate-from picker, Wi-Fi toast + retry, 50-text cap, Privacy row/storage, TalkBack/48 dp/200 % text, device matrix |
 | 12 | Azure backup, Node + SQLite (**conditional**) | `phases/12-azure-fallback.md` | not started |
 | 13 | Release | `phases/13-release.md` | not started |
+
+**1.0.0 (2026-10-18)** — first tester version: `pubspec` 1.0.0+2, CHANGELOG `[1.0.0]`; Gallery + Phase 1 spike
+screen removed. Ship by tagging `v1.0.0` on `develop` (release workflow).
 
 Critical path: 0 → 1 → 2 → 4 → 5 → 7 → 8 → 9 → 10 → 11 → 13. Phase 12 is only on it if Phase 10 decides.
 Update the Status column when a phase's exit criteria are all met.

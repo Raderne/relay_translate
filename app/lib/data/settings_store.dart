@@ -14,6 +14,7 @@ abstract final class SettingsKeys {
   static const onboarded = 'onboarded';
   static const hintSeen = 'hint_seen';
   static const wifiOnlyDownloads = 'wifi_only_downloads';
+  static const notificationsAsked = 'notifications_asked';
 
   static const all = [
     targetLang,
@@ -25,11 +26,12 @@ abstract final class SettingsKeys {
     onboarded,
     hintSeen,
     wifiOnlyDownloads,
+    notificationsAsked,
   ];
 }
 
 const _defaults = <String, String>{
-  SettingsKeys.targetLang: 'fr',
+  SettingsKeys.targetLang: 'ar', // Phase 11 default
   SettingsKeys.bubbleOn: '1',
   SettingsKeys.snap: '1',
   SettingsKeys.size: 'M',
@@ -38,6 +40,7 @@ const _defaults = <String, String>{
   SettingsKeys.onboarded: '0',
   SettingsKeys.hintSeen: '0',
   SettingsKeys.wifiOnlyDownloads: '1',
+  SettingsKeys.notificationsAsked: '0',
 };
 
 int bubbleDiameter(String size) => switch (size) {
@@ -82,6 +85,9 @@ class SettingsStore extends ChangeNotifier {
   bool get hintSeen => _bool(SettingsKeys.hintSeen);
   bool get wifiOnlyDownloads => _bool(SettingsKeys.wifiOnlyDownloads);
 
+  /// The notification explanation was shown once (Continue or Not now). 1.0.0.
+  bool get notificationsAsked => _bool(SettingsKeys.notificationsAsked);
+
   Future<void> setTargetLang(String code) => _set(SettingsKeys.targetLang, code);
 
   Future<void> setBubbleOn(bool on) => _set(SettingsKeys.bubbleOn, _fromBool(on));
@@ -125,6 +131,8 @@ class SettingsStore extends ChangeNotifier {
   Future<void> setOnboarded(bool value) => _set(SettingsKeys.onboarded, _fromBool(value));
 
   Future<void> setHintSeen(bool value) => _set(SettingsKeys.hintSeen, _fromBool(value));
+
+  Future<void> setNotificationsAsked(bool value) => _set(SettingsKeys.notificationsAsked, _fromBool(value));
 
   Future<void> setWifiOnlyDownloads(bool value) => _set(SettingsKeys.wifiOnlyDownloads, _fromBool(value));
 
