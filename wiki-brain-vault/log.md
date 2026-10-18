@@ -37,3 +37,9 @@ Touched: Screens and Flows, Flutter App, Phases Roadmap, phases/06-history.md
 
 ## [2026-09-28 22:20] session | Phase 8 accessibility translate
 Touched: Android Overlay and Accessibility, Per-App Message Rules, Flutter App, Phases Roadmap, index
+
+## [2026-10-18 12:00] session | CLAUDE.md init review
+Touched: none
+
+## [2026-10-18 12:30] session | GitHub release workflow with split APKs
+Touched: Phases Roadmap

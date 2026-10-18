@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Relay Translate
 
 Android app: a floating bubble over any app that translates on-screen messages (hold = whole screen,
@@ -25,9 +29,15 @@ wiki-brain-vault/   knowledge base (see below)
 |---|---|
 | Run app | `cd app && flutter run --flavor beta` |
 | App checks | `cd app && flutter analyze && flutter test` |
+| Single Dart test | `cd app && flutter test test/bubble/<file>_test.dart` (add `--name "<test name>"` to narrow) |
+| Kotlin unit tests | `cd app/android && ./gradlew :app:testBetaDebugUnitTest` (one class: `--tests "*DropTargetSelectorTest"`) |
+| Release | bump `version:` in `app/pubspec.yaml`, add a `## [x.y.z]` section to `CHANGELOG.md`, push tag `vx.y.z` on `develop` → `.github/workflows/release.yml` builds signed per-ABI `beta` APKs and publishes a GitHub Release |
 | Server (Phase 12 only) | `cd server && node --env-file=.env src/index.js` / `node --test` |
 
-(`app/` is created in Phase 0.)
+Dart tests in `app/test/` mirror `app/lib/` folders; Kotlin tests live in `app/android/app/src/test/`.
+
+**Never commit or push unless the user asks for it in the current message** (also in
+`.cursor/rules/no-commit.mdc`). Finishing a phase or a green test run is not a request to commit.
 
 ## Hard rules
 1. **Match the prototype.** Copy text, timings and sizes come from the design (see wiki

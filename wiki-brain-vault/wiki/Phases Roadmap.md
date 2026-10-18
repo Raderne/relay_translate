@@ -30,3 +30,11 @@ Update the Status column when a phase's exit criteria are all met.
   No `shared_preferences`. See [[Database Schema]].
 
 Links: [[Relay Translate]], [[Architecture]], [[Gotcha - Play Accessibility Policy]]
+
+## Release pipeline (added 2026-10-18, ahead of Phase 13)
+Tag `vX.Y.Z` on `develop` → `.github/workflows/release.yml`: checks that `app/pubspec.yaml` has the same version,
+takes the release notes from `CHANGELOG.md` (`tools/changelog-section.mjs`), runs analyze + test, signs with the
+`ANDROID_KEYSTORE_BASE64` / `ANDROID_KEYSTORE_PASSWORD` / `ANDROID_KEY_ALIAS` / `ANDROID_KEY_PASSWORD` secrets,
+builds `--flavor beta --split-per-abi` (arm64-v8a, armeabi-v7a, x86_64), refuses debug-signed APKs and publishes
+a GitHub Release (a version with `-` becomes a prerelease). `build.gradle.kts` reads `android/key.properties` and
+uses debug keys when that file is missing. Play signing (AAB, `prod` flavor) is still [[Phases Roadmap|Phase 13]] work.
